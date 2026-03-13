@@ -11,7 +11,7 @@ const GlobeView = React.lazy(() => import('./GlobeView'));
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
 // ── MapToolkit terrain background for 2D ──────────────────────────────────
-const TERRAIN_BG = '/maptoolkit-api/staticmap?center=20,10&zoom=1&size=1200x660&maptype=toursprung-terrain&apikey=sk_mt_hpbxPYZR1VJPtjJe5D1HFe2JezBVgokQ4o0XhQMwFxW0a32hE0TBCZGxuI2bks0O&factor=1';
+const TERRAIN_BG = `/maptoolkit-api/staticmap?center=20,10&zoom=1&size=1200x660&maptype=toursprung-terrain&apikey=${import.meta.env.VITE_MAPTOOLKIT_API_KEY}&factor=1`;
 
 // ── Haversine distance (km) ────────────────────────────────────────────────
 function haversine(a, b) {

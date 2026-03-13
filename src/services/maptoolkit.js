@@ -1,7 +1,7 @@
 // MapToolkit API service — adds real geographic enrichment to selected nodes
 const BASE = '/maptoolkit-api';
-// Use Vite environment variables with a fallback (for backwards compatibility if not set)
-const API_KEY = import.meta.env.VITE_MAPTOOLKIT_API_KEY || 'sk_mt_hpbxPYZR1VJPtjJe5D1HFe2JezBVgokQ4o0XhQMwFxW0a32hE0TBCZGxuI2bks0O';
+// Use Vite environment variables. Must be configured in .env
+const API_KEY = import.meta.env.VITE_MAPTOOLKIT_API_KEY;
 
 function url(path, params = {}) {
   // We use window.location.origin to support absolute URLs if needed (e.g. for images)
