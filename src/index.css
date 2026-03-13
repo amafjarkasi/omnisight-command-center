@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #2547f4;
+  --color-accent-purple: #a855f7;
+  --color-background-light: #f5f6f8;
+  --color-background-dark: #101322;
+  --color-glass: rgba(255, 255, 255, 0.03);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+:root {
+  --neon-cyan: #00f0ff;
+  --neon-blue: #2547f4;
+  --neon-purple: #a855f7;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --bg-glass: rgba(16, 19, 34, 0.8);
+  --border-glass: rgba(255, 255, 255, 0.1);
+}
+
+@layer base {
+  body {
+    background-image: radial-gradient(circle at 2px 2px, rgba(37, 71, 244, 0.05) 1px, transparent 0);
+    background-size: 24px 24px;
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: max(884px, 100dvh);
+    background-color: var(--color-background-dark);
+    color: white;
+  }
+}
+
+@utility glass-card {
+  background: rgba(34, 41, 73, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+  
+@utility glass-panel {
+  background: rgba(16, 19, 34, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass);
+}
+
+@utility neon-text-cyan {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+@utility neon-text-blue {
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px rgba(37, 71, 244, 0.5);
+}
+
+@utility neon-text-purple {
+  color: var(--neon-purple);
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes wave-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+.animate-wave-pulse {
+  animation: wave-pulse 2s infinite ease-out;
+  transform-origin: center;
+}
+
+@keyframes spin-dashed {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-dashed {
+  animation: spin-dashed 4s linear infinite;
+  transform-origin: center;
+}

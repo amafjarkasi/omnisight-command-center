@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Command Center: Intelligence Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2547f4",
+                        "accent-purple": "#a855f7",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101322",
+                        "glass": "rgba(255, 255, 255, 0.03)",
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-image: 
+                radial-gradient(circle at 2px 2px, rgba(37, 71, 244, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .glass-card {
+            background: rgba(34, 41, 73, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow-blue {
+            box-shadow: 0 0 15px rgba(37, 71, 244, 0.3);
+        }
+        .neon-glow-purple {
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-x-hidden">
+<!-- Header Navigation -->
+<header class="sticky top-0 z-50 flex items-center bg-background-dark/80 backdrop-blur-md p-4 border-b border-white/5 justify-between">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg border border-white/10 glass-card">
+<span class="material-symbols-outlined text-primary text-2xl">grid_view</span>
+</div>
+<div class="flex flex-col items-center">
+<h1 class="text-white text-xs font-medium tracking-[0.2em] uppercase opacity-60">Intelligence Hub</h1>
+<h2 class="text-white text-lg font-bold leading-tight tracking-tight">COMMAND CENTER</h2>
+</div>
+<div class="flex size-10 items-center justify-end">
+<button class="relative flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20">
+<span class="material-symbols-outlined">memory</span>
+<span class="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 p-4 space-y-4">
+<!-- Geospatial Visualization Card -->
+<div class="relative w-full aspect-video rounded-xl overflow-hidden glass-card border-primary/20">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent z-10"></div>
+<img alt="World map digital interface with connection lines" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-screen" data-alt="Digital world map with glowing connection nodes" data-location="Global" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfjgAyd2x1zZTKNPWj0GO3Q5DaSw-5jBLP2it0EuXNPaUTfe-AlScqQ8f36rPHuY4XMXUHIviZtCLatSD-tNyZPHI9KbRRP62bUpW9OPsXVhfBkBk54OX1yD0xsxHQVncYBq1XtaJn5v9gXHEWs50HfkMjONSbYVLrsbivmS0ouAPttPuioNEX_gDJ-7-ieS51mE7KJuZC3fbGMbyE0JSTSeXfhoeRbdk2n8-cXr4ehx63T09XjWmdRt0-z2vWf9WlEe5AbgnhBSq8"/>
+<div class="absolute top-4 left-4 z-20 flex items-center gap-2 px-3 py-1 bg-background-dark/80 rounded-full border border-white/10 backdrop-blur-md">
+<span class="flex size-2 rounded-full bg-primary neon-glow-blue"></span>
+<span class="text-[10px] font-bold tracking-widest text-white/80 uppercase">Live Feed: Orbit-7</span>
+</div>
+<div class="absolute bottom-4 right-4 z-20">
+<div class="text-right">
+<p class="text-xs text-white/50">Coordinates</p>
+<p class="text-sm font-mono text-primary font-bold">40.7128° N, 74.0060° W</p>
+</div>
+</div>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Global Connectivity Ring -->
+<div class="glass-card rounded-xl p-5 flex flex-col items-center justify-center space-y-3">
+<p class="text-[10px] font-bold tracking-widest text-white/40 uppercase text-center w-full">Global Connectivity</p>
+<div class="relative flex items-center justify-center h-24 w-24">
+<svg class="h-full w-full -rotate-90 transform" viewbox="0 0 100 100">
+<circle class="text-white/5" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="4.0192" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-xl font-bold text-white">98.4%</span>
+</div>
+</div>
+<div class="flex items-center gap-1 text-[#0bda65] bg-[#0bda65]/10 px-2 py-0.5 rounded text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px]">trending_up</span>
+                    2.1%
+                </div>
+</div>
+<!-- Integrity Bar Card -->
+<div class="glass-card rounded-xl p-5 flex flex-col justify-between">
+<div class="space-y-1">
+<p class="text-[10px] font-bold tracking-widest text-white/40 uppercase">Network Integrity</p>
+<h3 class="text-2xl font-bold text-white">Stable</h3>
+</div>
+<div class="space-y-3">
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full neon-glow-blue" style="width: 98%;"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-[10px] text-white/40 font-mono">14,209 NODES</span>
+<span class="text-[10px] text-primary font-mono">99.9% UPTIME</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Data Stream Flow -->
+<div class="glass-card rounded-xl p-5 space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-purple">waves</span>
+<p class="text-[10px] font-bold tracking-widest text-white/40 uppercase">Data Stream Flow</p>
+</div>
+<div class="text-[10px] text-accent-purple font-mono bg-accent-purple/10 px-2 py-0.5 rounded">6.4 GB/S</div>
+</div>
+<div class="h-16 w-full flex items-end justify-between gap-1 overflow-hidden">
+<!-- Visual mock of "purple waves" using bars of varying heights -->
+<div class="w-2 bg-accent-purple/40 rounded-t h-[40%]"></div>
+<div class="w-2 bg-accent-purple/60 rounded-t h-[60%]"></div>
+<div class="w-2 bg-accent-purple/80 rounded-t h-[80%]"></div>
+<div class="w-2 bg-accent-purple rounded-t h-[50%] neon-glow-purple"></div>
+<div class="w-2 bg-accent-purple/60 rounded-t h-[70%]"></div>
+<div class="w-2 bg-accent-purple/40 rounded-t h-[30%]"></div>
+<div class="w-2 bg-accent-purple/20 rounded-t h-[50%]"></div>
+<div class="w-2 bg-accent-purple/40 rounded-t h-[90%]"></div>
+<div class="w-2 bg-accent-purple rounded-t h-[45%] neon-glow-purple"></div>
+<div class="w-2 bg-accent-purple/60 rounded-t h-[75%]"></div>
+<div class="w-2 bg-accent-purple/80 rounded-t h-[35%]"></div>
+<div class="w-2 bg-accent-purple/40 rounded-t h-[55%]"></div>
+<div class="w-2 bg-accent-purple/20 rounded-t h-[85%]"></div>
+<div class="w-2 bg-accent-purple/50 rounded-t h-[40%]"></div>
+</div>
+</div>
+<!-- Real-time System Logs -->
+<div class="space-y-3">
+<h3 class="text-white text-[10px] font-bold tracking-widest px-1 uppercase opacity-40">Security Logs &amp; Events</h3>
+<div class="space-y-2">
+<!-- Log Entry 1 -->
+<div class="flex gap-4 p-3 glass-card rounded-lg border-l-2 border-l-primary/50">
+<span class="text-[10px] font-mono text-white/30 pt-1">14:02:41</span>
+<div class="flex-1">
+<p class="text-xs font-bold text-white/90">Authentication Success</p>
+<p class="text-[10px] text-white/40">User: Admin_01 // Node: LDN-04</p>
+</div>
+<span class="material-symbols-outlined text-primary text-sm">lock_open</span>
+</div>
+<!-- Log Entry 2 -->
+<div class="flex gap-4 p-3 glass-card rounded-lg border-l-2 border-l-accent-purple/50">
+<span class="text-[10px] font-mono text-white/30 pt-1">14:01:55</span>
+<div class="flex-1">
+<p class="text-xs font-bold text-white/90">Data Sync Initialized</p>
+<p class="text-[10px] text-white/40">Packet: 882kb // Stream: PURPLE-02</p>
+</div>
+<span class="material-symbols-outlined text-accent-purple text-sm">sync</span>
+</div>
+<!-- Log Entry 3 -->
+<div class="flex gap-4 p-3 glass-card rounded-lg border-l-2 border-l-white/10 opacity-60">
+<span class="text-[10px] font-mono text-white/30 pt-1">13:58:20</span>
+<div class="flex-1">
+<p class="text-xs font-bold text-white/90">Background Sweep</p>
+<p class="text-[10px] text-white/40">Clean // No anomalies detected</p>
+</div>
+<span class="material-symbols-outlined text-white/30 text-sm">radar</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="sticky bottom-0 z-50 bg-background-dark/90 border-t border-white/5 backdrop-blur-xl px-6 py-4 pb-8 flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-white/40 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[28px]">home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<div class="relative">
+<span class="material-symbols-outlined text-[28px]">monitoring</span>
+<span class="absolute -top-1 -right-1 flex h-2 w-2 rounded-full bg-primary neon-glow-blue"></span>
+</div>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/40 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[28px]">security</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-white/40 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[28px]">settings</span>
+</a>
+</nav>
+</body></html>
