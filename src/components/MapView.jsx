@@ -240,9 +240,7 @@ FlatMapView.propTypes = {
 };
 
 // ── Main MapView ───────────────────────────────────────────────────────────
-export default function MapView({ nodes, onSelectNode, selectedNodeId, flyToRef }) {
-  const [viewMode, setViewMode] = useState('2d');
-
+export default function MapView({ nodes, onSelectNode, selectedNodeId, flyToRef, viewMode, setViewMode }) {
   const connections = useMemo(
     () => buildConnections(nodes),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -311,4 +309,6 @@ MapView.propTypes = {
   onSelectNode: PropTypes.func.isRequired,
   selectedNodeId: PropTypes.string,
   flyToRef: PropTypes.object,
+  viewMode: PropTypes.string.isRequired,
+  setViewMode: PropTypes.func.isRequired,
 };

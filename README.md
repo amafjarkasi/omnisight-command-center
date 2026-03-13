@@ -5,8 +5,8 @@
 
   [![React](https://img.shields.io/badge/React-19-blue.svg?style=flat&logo=react)](https://react.dev/)
   [![Vite](https://img.shields.io/badge/Vite-8-646CFF.svg?style=flat&logo=vite)](https://vitejs.dev/)
+  [![WebSockets](https://img.shields.io/badge/WebSockets-Live-00ff00.svg?style=flat)](#)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC.svg?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#)
 </div>
 
 <br />
@@ -29,20 +29,19 @@ Click on any node (either on the 3D globe or 2D map) to view deep diagnostics, l
 
 ## ✨ Core Features
 
+* **🔌 Real-Time WebSocket Telemetry**
+  * A dedicated Node.js WebSocket backend streams live fluctuating latencies, throughput metrics, and dynamic server logs at 2000ms intervals directly into the React context.
 * **🌍 Interactive Maps (2D & 3D)**
-  * **3D WebGL Globe**: Powered by `react-globe.gl` and `three.js`. Features auto-rotation, glowing connection arcs, and interactive node clicking.
-  * **2D Flat Map**: Powered by `react-simple-maps` with smooth panning and zooming (`react-zoom-pan-pinch`), overlaying a real-world terrain map.
-* **📊 Real-Time Analytics & Telemetry**
-  * Live-streaming data charts using `recharts` for monitoring system throughput (GB/s).
-  * Animated radial rings for Global Connectivity scores.
-  * Auto-updating regional health metrics.
+  * **3D WebGL Globe**: Powered by `react-globe.gl`. Features auto-rotation, glowing connection arcs, and a **"Click-to-Fly"** search engine that smoothly orbits to any physical address on Earth.
+  * **2D Flat Map**: Powered by `react-simple-maps` with smooth panning and zooming, overlaying a real-world terrain map.
 * **🎛️ Advanced Node Diagnostics**
   * **MapToolkit Integration**: Uses real geocoding to resolve a node's exact location, elevation, and address based on its coordinates.
   * **FastRouting (OSRM)**: Dynamically calculates the actual ground driving route vs. theoretical subsea fiber latency between datacenters.
 * **📜 Live System Logs**
   * Streaming terminal of `INFO`, `WARN`, and `ALERT` security and network events, complete with filtering.
-* **🎨 "Glassmorphism" UI**
-  * Beautiful, translucent components with neon accents (Cyan/Purple), built entirely with raw Tailwind CSS 4 utilities and `lucide-react` icons.
+* **🎨 "Glassmorphism" UI & Hack Mode**
+  * Translucent components with neon accents (Cyan/Purple), built entirely with raw Tailwind CSS 4 utilities.
+  * **Easter Egg**: Type `hack` anywhere on your keyboard to instantly trigger a system override, flipping the UI into a glowing Terminal Green matrix theme.
 * **⚡ Highly Optimized**
   * **Lazy Loading**: The heavy 3D Globe component is lazily loaded via `React.Suspense` to ensure the initial app payload is tiny.
   * **Rolldown Chunking**: Automated vendor chunking separates React, Three.js, Maps, and UI libraries into cacheable assets.
@@ -55,11 +54,11 @@ Click on any node (either on the 3D globe or 2D map) to view deep diagnostics, l
 | :--- | :--- | :--- |
 | **Framework** | [React 19](https://react.dev/) | Latest concurrent features and hooks |
 | **Bundler** | [Vite 8](https://vite.dev/) | Ultra-fast HMR and optimized build via Rolldown |
+| **Backend** | [ws](https://www.npmjs.com/package/ws) | Native Node.js WebSockets for live data streaming |
 | **Styling** | [Tailwind CSS 4](https://tailwindcss.com/) | Utility-first CSS with CSS variable theme |
 | **3D Engine** | [react-globe.gl](https://github.com/vasturiano/react-globe.gl) | WebGL-accelerated interactive globe |
 | **2D Engine** | [react-simple-maps](https://www.react-simple-maps.io/) | D3-based SVG maps with panning |
 | **Charts** | [Recharts](https://recharts.org/) | Composable SVG charting |
-| **Icons** | [Lucide React](https://lucide.dev/) | Beautiful, consistent icon set |
 | **Geo API** | [MapToolkit](https://maptoolkit.net/) | Reverse geocoding and routing |
 
 ---
@@ -84,30 +83,38 @@ Copy the example file:
 cp .env.example .env
 ```
 Open `.env` and replace `your_api_key_here` with your actual MapToolkit API key.
-*(Note: Vite proxies `/maptoolkit-api` requests under the hood to bypass browser CORS restrictions).*
 
-### 4. Start Development Server
+### 4. Start the Application
+You need to run both the WebSocket backend and the Vite frontend server. Open two separate terminals:
+
+**Terminal 1 (Backend):**
+```bash
+npm run backend
+```
+
+**Terminal 2 (Frontend):**
 ```bash
 npm run dev
 ```
-Navigate to `http://localhost:5173` in your browser to view the application.
+
+Navigate to `http://localhost:5173` in your browser.
 
 ---
 
 ## 🏗️ Architecture & Scripts
 
 ### Code Organization
-* `src/components/` - Core UI widgets (`MapView`, `IntelligenceHub`, `SystemLogs`, `NodeDetailPanel`).
+* `server.js` - Native Node WebSocket backend streaming simulated network node arrays and system logs.
+* `src/hooks/useMockData.js` - Connects to the WebSocket backend, ingests ticks, and populates the global React context.
 * `src/components/GlobeView.jsx` - Isolated 3D engine, lazily loaded.
 * `src/services/maptoolkit.js` - Dedicated API abstraction for fetching geographic data through the Vite proxy.
-* `src/hooks/useMockData.js` - Simulates a real-time WebSocket backend by generating fluctuating latency, packets, and server logs.
 
 ### Available Commands
-* `npm run dev` — Starts the Vite dev server.
+* `npm run backend` — Starts the WebSocket telemetry server on port 8080.
+* `npm run dev` — Starts the Vite frontend server.
 * `npm run build` — Builds the application for production, intelligently chunking vendor libraries.
 * `npm run preview` — Boots a local server to preview the production build.
 * `npm run lint` — Runs ESLint across the codebase.
-* `node test_script.cjs` — Runs an automated end-to-end test via Puppeteer to verify canvas mounting and node clickability.
 
 ---
 

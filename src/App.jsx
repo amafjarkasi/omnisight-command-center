@@ -13,6 +13,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [geocodeSuggestions, setGeocodeSuggestions] = useState([]);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [viewMode, setViewMode] = useState('2d');
   const flyToRef = useRef(null);
   const geocodeDebounce = useRef(null);
 
@@ -88,9 +89,12 @@ export default function App() {
   const handleGeoSuggestion = useCallback((suggestion) => {
     setGeocodeSuggestions([]);
     setSearchQuery('');
-    if (flyToRef.current) {
-      flyToRef.current(parseFloat(suggestion.lat), parseFloat(suggestion.lon), 1.5);
-    }
+    setViewMode('3d'); // Automatically switch to 3D globe to fly
+    setTimeout(() => {
+      if (flyToRef.current) {
+        flyToRef.current(parseFloat(suggestion.lat), parseFloat(suggestion.lon), 1.5);
+      }
+    }, 100);
     pushLog('INFO', `Globe navigated to: ${suggestion.display_name.split(',').slice(0, 2).join(',')}`);
   }, [pushLog]);
 
@@ -98,6 +102,23 @@ export default function App() {
     setSearchQuery('');
     setGeocodeSuggestions([]);
   }, []);
+
+  // ── Hack Mode Easter Egg ────────────────────────────────────────────────
+  useEffect(() => {
+    let keyBuffer = '';
+    const handleKeyDown = (e) => {
+      keyBuffer += e.key.toLowerCase();
+      if (keyBuffer.length > 5) keyBuffer = keyBuffer.slice(-5);
+      if (keyBuffer === 'hack') {
+        const isHack = document.documentElement.getAttribute('data-theme') === 'hack';
+        document.documentElement.setAttribute('data-theme', isHack ? '' : 'hack');
+        pushLog('ALERT', isHack ? 'SYSTEM RESTORED TO NORMAL PARAMETERS' : 'SYSTEM OVERRIDE: HACK MODE ENGAGED');
+        keyBuffer = '';
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [pushLog]);
 
   // Close geocode dropdown on outside click
   useEffect(() => {
@@ -116,6 +137,8 @@ export default function App() {
           onSelectNode={handleSelectNode}
           selectedNodeId={selectedNode?.id}
           flyToRef={flyToRef}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
         />
       </div>
 

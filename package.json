@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "backend": "node server.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -20,7 +21,8 @@
     "react-simple-maps": "^3.0.0",
     "react-zoom-pan-pinch": "^3.7.0",
     "recharts": "^3.8.0",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "ws": "^8.19.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
