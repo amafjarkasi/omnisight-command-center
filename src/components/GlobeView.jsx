@@ -96,11 +96,11 @@ export default function GlobeView({ nodes, connections, onSelectNode, selectedNo
   const nodeTooltip = useCallback(node => `
     <div style="
       background:rgba(2,5,20,0.95);
-      border:1px solid ${node.type==='super'?'#a855f7':'#00f0ff'};
+      border:1px solid ${node.type==='super'?'#8b5cf6':'#38bdf8'};
       color:${node.type==='super'?'#d8b4fe':'#67e8f9'};
       padding:8px 12px;border-radius:8px;
       font-family:'Courier New',monospace;font-size:12px;line-height:1.6;
-      box-shadow:0 0 20px ${node.type==='super'?'rgba(168,85,247,0.45)':'rgba(0,240,255,0.45)'}
+
     ">
       <strong>${node.id}</strong><br/>
       ${node.name}<br/>

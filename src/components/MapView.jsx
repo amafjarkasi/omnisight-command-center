@@ -157,7 +157,7 @@ function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
                         <circle
                           r={R + 7}
                           fill="none"
-                          stroke={isSuper ? '#a855f7' : '#00f0ff'}
+                          stroke={isSuper ? '#8b5cf6' : '#38bdf8'}
                           strokeWidth="0.9"
                           opacity={isSelected ? 1 : 0.45}
                           style={{ pointerEvents: 'none' }}
@@ -168,9 +168,9 @@ function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
                         r={R}
                         fill={isSelected ? '#fff' : isSuper ? '#c084fc' : '#22d3ee'}
                         fillOpacity={0.96}
-                        stroke={isSuper ? '#a855f7' : '#00f0ff'}
+                        stroke={isSuper ? '#8b5cf6' : '#38bdf8'}
                         strokeWidth={isSelected || isHovered ? 2.5 : 1}
-                        style={{ cursor: 'pointer', transition: 'all 0.15s', filter: isSelected ? `drop-shadow(0 0 6px #fff)` : `drop-shadow(0 0 4px ${isSuper ? '#c084fc' : '#22d3ee'})` }}
+                        style={{ cursor: 'pointer', transition: 'all 0.15s' }}
                         cursor="pointer"
                         onMouseEnter={() => setHoveredNode(node)}
                         onMouseLeave={() => setHoveredNode(null)}
@@ -213,7 +213,7 @@ function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
                     left: `${Math.min(1050, ((hoveredNode.lng + 180) / 360) * 1200 + 18)}px`,
                     top: `${Math.max(10, ((90 - hoveredNode.lat) / 180) * 660 - 64)}px`,
                     minWidth: 160,
-                    borderLeft: `2px solid ${hoveredNode.type === 'super' ? '#a855f7' : '#00f0ff'}`,
+                    borderLeft: `2px solid ${hoveredNode.type === 'super' ? '#8b5cf6' : '#38bdf8'}`,
                     borderRadius: 10,
                     padding: '8px 12px',
                   }}

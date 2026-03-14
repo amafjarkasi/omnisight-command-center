@@ -2,23 +2,23 @@
 
 @theme {
   --color-primary: #2547f4;
-  --color-accent-purple: #a855f7;
+  --color-accent-purple: #8b5cf6;
   --color-background-light: #f5f6f8;
-  --color-background-dark: #101322;
+  --color-background-dark: #0f172a;
   --color-glass: rgba(255, 255, 255, 0.03);
   --color-glass-border: rgba(255, 255, 255, 0.1);
 
-  --font-display: "Space Grotesk", sans-serif;
+  --font-display: "Inter", sans-serif;
 }
 
 :root {
-  --neon-cyan: #00f0ff;
-  --neon-blue: #2547f4;
-  --neon-purple: #a855f7;
+  --neon-cyan: #38bdf8;
+  --neon-blue: #3b82f6;
+  --neon-purple: #8b5cf6;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --bg-glass: rgba(16, 19, 34, 0.8);
-  --border-glass: rgba(255, 255, 255, 0.1);
+  --bg-glass: #1e293b;
+  --border-glass: #334155;
 }
 
 [data-theme="hack"] {
@@ -36,9 +36,7 @@
 
 @layer base {
   body {
-    background-image: radial-gradient(circle at 2px 2px, rgba(37, 71, 244, 0.05) 1px, transparent 0);
-    background-size: 24px 24px;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     min-height: max(884px, 100dvh);
     background-color: var(--color-background-dark);
@@ -47,30 +45,27 @@
 }
 
 @utility glass-card {
-  background: rgba(34, 41, 73, 0.4);
-  backdrop-filter: blur(12px);
+  background: var(--bg-glass);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
   
 @utility glass-panel {
-  background: rgba(16, 19, 34, 0.8);
-  backdrop-filter: blur(12px);
+  background: var(--bg-glass);
   border: 1px solid var(--border-glass);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
 
 @utility neon-text-cyan {
   color: var(--neon-cyan);
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
 
 @utility neon-text-blue {
   color: var(--neon-blue);
-  text-shadow: 0 0 10px rgba(37, 71, 244, 0.5);
 }
 
 @utility neon-text-purple {
   color: var(--neon-purple);
-  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
 }
 
 @utility no-scrollbar {

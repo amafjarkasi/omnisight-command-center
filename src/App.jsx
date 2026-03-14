@@ -143,7 +143,7 @@ export default function App() {
       </div>
 
       {/* ── Header bar ── */}
-      <header className="absolute top-0 left-0 right-0 z-50 flex items-center gap-4 bg-background-dark/85 backdrop-blur-md px-5 py-3.5 border-b border-primary/20 pointer-events-auto shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
+      <header className="absolute top-0 left-0 right-0 z-50 flex items-center gap-4 bg-background-dark/85 backdrop-blur-md px-5 py-3.5 border-b border-primary/20 pointer-events-auto">
         {/* Logo */}
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/30 glass-card">
           <span className="material-symbols-outlined text-primary text-xl neon-text-blue">grid_view</span>
@@ -157,7 +157,7 @@ export default function App() {
 
         {/* Search bar — full featured */}
         <div className="flex-1 max-w-md mx-auto relative" onClick={e => e.stopPropagation()}>
-          <div className={`flex w-full items-center rounded-xl overflow-hidden glass-card border transition-all ${searchFocused || searchQuery ? 'border-primary/70 shadow-[0_0_15px_rgba(37,71,244,0.25)]' : 'border-primary/25'}`}>
+          <div className={`flex w-full items-center rounded-xl overflow-hidden glass-card border transition-all ${searchFocused || searchQuery ? 'border-primary/70 shadow-md' : 'border-primary/25'}`}>
             <Search size={14} className="ml-4 text-primary/60 flex-shrink-0" />
             <input
               value={searchQuery}
@@ -208,7 +208,7 @@ export default function App() {
         <div className="flex items-center gap-2 ml-auto">
           {selectedNode && (
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 glass-card rounded-xl border border-cyan-500/30 text-xs text-cyan-300 font-mono">
-              <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
               {selectedNode.id}
             </div>
           )}
@@ -219,7 +219,7 @@ export default function App() {
             title="Clear selected node"
           >
             <Server size={17} />
-            <span className="absolute top-2 right-2 flex h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#00f0ff]" />
+            <span className="absolute top-2 right-2 flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
           </button>
         </div>
       </header>
