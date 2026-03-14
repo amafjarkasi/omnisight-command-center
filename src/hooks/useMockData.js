@@ -84,5 +84,9 @@ export function useMockData() {
     setSystemLogs(prev => [{ id: Date.now(), type, timestamp: new Date(), message }, ...prev.slice(0, 49)]);
   };
 
-  return { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, pushLog };
+    const clearLogs = () => {
+    setSystemLogs([]);
+  };
+
+  return { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, pushLog, clearLogs };
 }

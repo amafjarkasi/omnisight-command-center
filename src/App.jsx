@@ -4,11 +4,11 @@ import IntelligenceHub from './components/IntelligenceHub';
 import SystemLogs from './components/SystemLogs';
 import NodeDetailPanel from './components/NodeDetailPanel';
 import { useMockData } from './hooks/useMockData';
-import { Server, Search, X, MapPin } from 'lucide-react';
+import { Server, Search, X, MapPin, Terminal } from 'lucide-react';
 import { geocodeSearch } from './services/maptoolkit';
 
 export default function App() {
-  const { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, pushLog } = useMockData();
+  const { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, pushLog, clearLogs } = useMockData();
   const [selectedNode, setSelectedNode] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [geocodeSuggestions, setGeocodeSuggestions] = useState([]);
@@ -113,21 +113,25 @@ export default function App() {
   }, []);
 
   // ── Hack Mode Easter Egg ────────────────────────────────────────────────
+  const toggleHackMode = useCallback(() => {
+    const isHack = document.documentElement.getAttribute('data-theme') === 'hack';
+    document.documentElement.setAttribute('data-theme', isHack ? '' : 'hack');
+    pushLog('ALERT', isHack ? 'SYSTEM RESTORED TO NORMAL PARAMETERS' : 'SYSTEM OVERRIDE: HACK MODE ENGAGED');
+  }, [pushLog]);
+
   useEffect(() => {
     let keyBuffer = '';
     const handleKeyDown = (e) => {
       keyBuffer += e.key.toLowerCase();
       if (keyBuffer.length > 5) keyBuffer = keyBuffer.slice(-5);
       if (keyBuffer === 'hack') {
-        const isHack = document.documentElement.getAttribute('data-theme') === 'hack';
-        document.documentElement.setAttribute('data-theme', isHack ? '' : 'hack');
-        pushLog('ALERT', isHack ? 'SYSTEM RESTORED TO NORMAL PARAMETERS' : 'SYSTEM OVERRIDE: HACK MODE ENGAGED');
+        toggleHackMode();
         keyBuffer = '';
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [pushLog]);
+  }, [toggleHackMode]);
 
   // Close geocode dropdown on outside click
   useEffect(() => {
@@ -215,6 +219,14 @@ export default function App() {
 
         {/* Right actions */}
         <div className="flex items-center gap-2 ml-auto">
+          <button
+            aria-label="Toggle Hack Mode"
+            className="relative flex size-10 items-center justify-center rounded-none glass-card text-primary border border-primary/35 hover:bg-primary/20 transition-colors cursor-pointer mr-2"
+            onClick={toggleHackMode}
+            title="Toggle Hack Mode"
+          >
+            <Terminal size={17} />
+          </button>
           {selectedNode && (
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 glass-card rounded-none border border-cyan-500/30 text-xs text-cyan-300 font-mono">
               <div className="w-1.5 h-1.5 rounded-none bg-cyan-400" />
@@ -259,7 +271,7 @@ export default function App() {
             </div>
           )}
           <div className="flex-1 min-h-0 overflow-hidden">
-            <SystemLogs logs={systemLogs} />
+            <SystemLogs logs={systemLogs} onClear={clearLogs} />
           </div>
         </div>
 
