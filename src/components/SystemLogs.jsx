@@ -15,12 +15,15 @@ function formatTime(ts) {
 export default function SystemLogs({ logs }) {
   const [filter, setFilter] = useState('ALL');
 
-  const { filteredLogs, counts } = useMemo(() => {
-    const filtered = filter === 'ALL' ? logs : logs.filter(l => l.type === filter);
-    const cnts = { ALERT: 0, WARN: 0, INFO: 0 };
-    logs.forEach(l => { if (cnts[l.type] !== undefined) cnts[l.type]++; });
-    return { filteredLogs: filtered, counts: cnts };
-  }, [logs, filter]);
+  const filteredLogs = useMemo(() => {
+    return filter === 'ALL' ? logs : logs.filter(l => l.type === filter);
+  }, [filter, logs]);
+
+  const counts = useMemo(() => {
+    const c = { ALERT: 0, WARN: 0, INFO: 0 };
+    logs.forEach(l => { if (c[l.type] !== undefined) c[l.type]++; });
+    return c;
+  }, [logs]);
 
   return (
     <div
