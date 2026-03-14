@@ -145,19 +145,19 @@ export default function App() {
       {/* ── Header bar ── */}
       <header className="absolute top-0 left-0 right-0 z-50 flex items-center gap-4 bg-background-dark/85 backdrop-blur-md px-5 py-3.5 border-b border-primary/20 pointer-events-auto">
         {/* Logo */}
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/30 glass-card">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-none border border-primary/30 glass-card">
           <span className="material-symbols-outlined text-primary text-xl neon-text-blue">grid_view</span>
         </div>
 
         {/* Title */}
         <div className="hidden lg:block">
-          <div className="text-[11px] font-bold tracking-[0.2em] text-primary/70 uppercase">Geospatial</div>
-          <div className="text-sm font-bold text-white tracking-widest uppercase leading-none">Command Node</div>
+          <div className="text-[11px] font-bold tracking-[0.2em] text-primary/70 uppercase">Tactical</div>
+          <div className="text-sm font-bold text-white tracking-widest uppercase leading-none">Global Operations Command</div>
         </div>
 
         {/* Search bar — full featured */}
         <div className="flex-1 max-w-md mx-auto relative" onClick={e => e.stopPropagation()}>
-          <div className={`flex w-full items-center rounded-xl overflow-hidden glass-card border transition-all ${searchFocused || searchQuery ? 'border-primary/70 shadow-md' : 'border-primary/25'}`}>
+          <div className={`flex w-full items-center rounded-none overflow-hidden glass-card border transition-all ${searchFocused || searchQuery ? 'border-primary/70 shadow-md' : 'border-primary/25'}`}>
             <Search size={14} className="ml-4 text-primary/60 flex-shrink-0" />
             <input
               value={searchQuery}
@@ -176,7 +176,7 @@ export default function App() {
 
           {/* Geocode suggestions dropdown */}
           {geocodeSuggestions.length > 0 && searchFocused === false || geocodeSuggestions.length > 0 ? (
-            <div className="absolute top-full left-0 right-0 mt-1 glass-panel rounded-xl overflow-hidden z-[9999] border border-white/10 shadow-2xl">
+            <div className="absolute top-full left-0 right-0 mt-1 glass-panel rounded-none overflow-hidden z-[9999] border border-white/10 shadow-2xl">
               <div className="px-3 py-2 border-b border-white/[0.06]">
                 <span className="text-[10px] text-white/30 uppercase font-bold tracking-widest">📍 MapToolkit — Jump to location</span>
               </div>
@@ -207,19 +207,19 @@ export default function App() {
         {/* Right actions */}
         <div className="flex items-center gap-2 ml-auto">
           {selectedNode && (
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 glass-card rounded-xl border border-cyan-500/30 text-xs text-cyan-300 font-mono">
-              <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 glass-card rounded-none border border-cyan-500/30 text-xs text-cyan-300 font-mono">
+              <div className="w-1.5 h-1.5 rounded-none bg-cyan-400" />
               {selectedNode.id}
             </div>
           )}
           <button
             aria-label="Clear selected node"
-            className="relative flex size-10 items-center justify-center rounded-xl glass-card text-primary border border-primary/35 hover:bg-primary/20 transition-colors cursor-pointer"
+            className="relative flex size-10 items-center justify-center rounded-none glass-card text-primary border border-primary/35 hover:bg-primary/20 transition-colors cursor-pointer"
             onClick={() => setSelectedNode(null)}
             title="Clear selected node"
           >
             <Server size={17} />
-            <span className="absolute top-2 right-2 flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
+            <span className="absolute top-2 right-2 flex h-1.5 w-1.5 rounded-none bg-cyan-400" />
           </button>
         </div>
       </header>

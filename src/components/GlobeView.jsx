@@ -208,7 +208,7 @@ export default function GlobeView({ nodes, connections, onSelectNode, selectedNo
         <button
           onClick={() => setAutoRotate(v => !v)}
           title="Click to toggle, or hold globe to toggle"
-          className={`flex items-center gap-2 px-3 py-1.5 glass-panel rounded-full text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer
+          className={`flex items-center gap-2 px-3 py-1.5 glass-panel rounded-none text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer
             ${autoRotate
               ? 'text-emerald-400 border border-emerald-500/40 shadow-[0_0_12px_rgba(52,211,153,0.2)]'
               : 'text-red-400 border border-red-500/30'
