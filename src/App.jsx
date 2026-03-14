@@ -34,24 +34,33 @@ export default function App() {
   const nearestNode = useMemo(() => {
     if (!selectedNode) return null;
     const regionPrefix = selectedNode.region.split('-')[0]; // e.g. "EU" from "EU-West"
-    const candidates = activeNodes.filter(n =>
-      n.id !== selectedNode.id && n.region.startsWith(regionPrefix)
-    );
-    if (!candidates.length) {
-      // Fallback: absolute nearest node regardless of region
-      return activeNodes
-        .filter(n => n.id !== selectedNode.id)
-        .sort((a, b) => {
-          const da = (a.lat - selectedNode.lat) ** 2 + (a.lng - selectedNode.lng) ** 2;
-          const db = (b.lat - selectedNode.lat) ** 2 + (b.lng - selectedNode.lng) ** 2;
-          return da - db;
-        })[0] || null;
+
+    let nearestCandidate = null;
+    let minCandidateDist = Infinity;
+    let nearestFallback = null;
+    let minFallbackDist = Infinity;
+
+    for (const n of activeNodes) {
+      if (n.id === selectedNode.id) continue;
+
+      const dist = (n.lat - selectedNode.lat) ** 2 + (n.lng - selectedNode.lng) ** 2;
+
+      // Track candidate (same region prefix)
+      if (n.region.startsWith(regionPrefix)) {
+        if (dist < minCandidateDist) {
+          minCandidateDist = dist;
+          nearestCandidate = n;
+        }
+      }
+
+      // Track absolute nearest for fallback
+      if (dist < minFallbackDist) {
+        minFallbackDist = dist;
+        nearestFallback = n;
+      }
     }
-    return candidates.sort((a, b) => {
-      const da = (a.lat - selectedNode.lat) ** 2 + (a.lng - selectedNode.lng) ** 2;
-      const db = (b.lat - selectedNode.lat) ** 2 + (b.lng - selectedNode.lng) ** 2;
-      return db - da; // placeholder for diff
-    })[0];
+
+    return nearestCandidate || nearestFallback || null;
   }, [selectedNode, activeNodes]);
 
   // ── Node filtering ──────────────────────────────────────────────────────
