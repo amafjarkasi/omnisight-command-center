@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   X, Activity, Zap, Globe, MapPin, Mountain, Navigation,
-  Server, Truck, Route, Clock, Wifi, ChevronRight, Copy, Check,
+  Server, Truck, Route, Clock, Wifi, ChevronRight,
 } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { reverseGeocode, getElevation, staticMapUrl, fastRoute } from '../services/maptoolkit';
@@ -24,23 +24,6 @@ function StatBadge(props) {
 }
 
 // ── Maneuver icon text ────────────────────────────────────────────────────
-// ── Copy button ───────────────────────────────────────────────────────────
-function CopyIconButton({ text }) {
-  const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-  return (
-    <button onClick={handleCopy} className="inline-flex items-center ml-1.5 text-white/40 hover:text-white transition-colors cursor-pointer" title="Copy to clipboard">
-      {copied ? <Check size={11} className="text-green-400" /> : <Copy size={11} />}
-    </button>
-  );
-}
-CopyIconButton.propTypes = { text: PropTypes.string.isRequired };
-
 const MANEUVER_ICON = {
   turn: '↱', 'new name': '→', depart: '⊙', arrive: '⊛',
   merge: '⇝', fork: '⑂', roundabout: '↻', rotary: '↻',
@@ -306,7 +289,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
           <div key={label} className="flex justify-between items-center">
             <span className="text-xs text-white/35 uppercase tracking-widest font-bold">{label}</span>
             <span
-              className={`flex items-center text-xs ${mono ? 'font-mono' : ''} ${accent ? 'px-2 py-1 rounded-none' : 'text-white/75'}`}
+              className={`text-xs ${mono ? 'font-mono' : ''} ${accent ? 'px-2 py-1 rounded-none' : 'text-white/75'}`}
               style={accent ? { background: accentBg, color: accentColor } : {}}
             >
               {value}
