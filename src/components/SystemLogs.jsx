@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AlertCircle, Info, TriangleAlert, Radio } from 'lucide-react';
 import PropTypes from 'prop-types';
 
@@ -15,9 +15,15 @@ function formatTime(ts) {
 export default function SystemLogs({ logs }) {
   const [filter, setFilter] = useState('ALL');
 
-  const filteredLogs = filter === 'ALL' ? logs : logs.filter(l => l.type === filter);
-  const counts = { ALERT: 0, WARN: 0, INFO: 0 };
-  logs.forEach(l => { if (counts[l.type] !== undefined) counts[l.type]++; });
+  const filteredLogs = useMemo(() => {
+    return filter === 'ALL' ? logs : logs.filter(l => l.type === filter);
+  }, [filter, logs]);
+
+  const counts = useMemo(() => {
+    const c = { ALERT: 0, WARN: 0, INFO: 0 };
+    logs.forEach(l => { if (c[l.type] !== undefined) c[l.type]++; });
+    return c;
+  }, [logs]);
 
   return (
     <div
