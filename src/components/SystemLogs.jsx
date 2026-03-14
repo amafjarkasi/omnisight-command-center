@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { AlertCircle, Info, TriangleAlert, Radio } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { AlertCircle, Info, TriangleAlert, Radio, Trash2, Download } from 'lucide-react';
 import PropTypes from 'prop-types';
 
 const TYPE_CONFIG = {
@@ -12,7 +12,7 @@ function formatTime(ts) {
   return new Date(ts).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
 }
 
-export default function SystemLogs({ logs }) {
+export default function SystemLogs({ logs, onClear }) {
   const [filter, setFilter] = useState('ALL');
 
   const filteredLogs = useMemo(() => {
@@ -23,6 +23,17 @@ export default function SystemLogs({ logs }) {
     const c = { ALERT: 0, WARN: 0, INFO: 0 };
     logs.forEach(l => { if (c[l.type] !== undefined) c[l.type]++; });
     return c;
+  }, [logs]);
+
+  const handleDownload = useCallback(() => {
+    const text = logs.map(l => `[${new Date(l.timestamp).toISOString()}] [${l.type}] ${l.message}`).join("\n");
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `system-logs-${new Date().toISOString()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   }, [logs]);
 
   return (
@@ -36,9 +47,19 @@ export default function SystemLogs({ logs }) {
           <Radio size={16} className="text-primary animate-pulse" />
           <span className="text-sm font-bold text-primary uppercase tracking-widest">System Events</span>
         </div>
+        <div className="flex items-center gap-3">
+          <button aria-label="Download Logs" onClick={handleDownload} className="text-white/40 hover:text-white transition-colors cursor-pointer" title="Download Logs">
+            <Download size={14} />
+          </button>
+          {onClear && (
+            <button aria-label="Clear Logs" onClick={onClear} className="text-white/40 hover:text-red-400 transition-colors cursor-pointer" title="Clear Logs">
+              <Trash2 size={14} />
+            </button>
+          )}
         <span className="text-xs font-bold px-2.5 py-1 rounded-none bg-blue-600/20 text-blue-300 border border-blue-500/25">
           {logs.length} Total
         </span>
+        </div>
       </div>
 
       {/* ── Filter tabs ── */}
