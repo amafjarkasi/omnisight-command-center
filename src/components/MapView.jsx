@@ -1,4 +1,4 @@
-import React, {  useMemo, useState, Suspense , useRef } from 'react';
+import React, { useMemo, useState, Suspense } from 'react';
 import { Crosshair, Globe2, Map as MapIcon, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
@@ -291,32 +291,10 @@ FlatMapView.propTypes = {
 
 // ── Main MapView ───────────────────────────────────────────────────────────
 export default function MapView({ nodes, onSelectNode, selectedNodeId, flyToRef, viewMode, setViewMode }) {
-  const prevNodesRef = useRef(nodes);
-  const graphVersionRef = useRef(0);
-
-  let hasChanged = false;
-  if (prevNodesRef.current !== nodes) {
-    if (prevNodesRef.current.length !== nodes.length) {
-      hasChanged = true;
-    } else {
-      for (let i = 0; i < nodes.length; i++) {
-        if (prevNodesRef.current[i].id !== nodes[i].id || prevNodesRef.current[i].type !== nodes[i].type) {
-          hasChanged = true;
-          break;
-        }
-      }
-    }
-  }
-
-  if (hasChanged) {
-    graphVersionRef.current += 1;
-    prevNodesRef.current = nodes;
-  }
-
   const connections = useMemo(
     () => buildConnections(nodes),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [graphVersionRef.current]
+    [nodes.map(n => n.id + n.type).join(',')]
   );
 
   return (
