@@ -170,7 +170,7 @@ function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
                         fillOpacity={0.96}
                         stroke={isSuper ? '#a855f7' : '#00f0ff'}
                         strokeWidth={isSelected || isHovered ? 2.5 : 1}
-                        style={{ cursor: 'pointer', transition: 'all 0.15s', filter: isSelected ? `drop-shadow(0 0 6px #fff)` : `drop-shadow(0 0 4px ${isSuper ? '#c084fc' : '#22d3ee'})` }}
+                        style={{ cursor: 'pointer', transition: 'all 0.15s' }}
                         cursor="pointer"
                         onMouseEnter={() => setHoveredNode(node)}
                         onMouseLeave={() => setHoveredNode(null)}

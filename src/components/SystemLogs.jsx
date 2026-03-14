@@ -40,7 +40,7 @@ export default function SystemLogs({ logs }) {
         <button
           onClick={() => setFilter('ALL')}
           className={`flex-1 text-xs font-bold py-1.5 rounded-lg transition-all cursor-pointer uppercase tracking-wide
-            ${filter === 'ALL' ? 'bg-primary/30 text-white shadow-[0_0_10px_rgba(37,71,244,0.3)] border border-primary/50' : 'text-white/40 hover:bg-white/5 border border-transparent'}`}
+            ${filter === 'ALL' ? 'bg-primary/30 text-white border border-primary/50' : 'text-white/40 hover:bg-white/5 border border-transparent'}`}
         >
           All
         </button>
