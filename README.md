@@ -1,17 +1,18 @@
 <div align="center">
-  <img src="public/favicon.svg" alt="Nexus Command Center Logo" width="120" />
-  <h1>Nexus Command Center</h1>
+  <img src="public/favicon.svg" alt="OmniSight Command Center Logo" width="120" />
+  <h1>OmniSight Command Center</h1>
   <p><strong>A high-performance, real-time command center dashboard built with React 19 and Vite 8.</strong></p>
 
   [![React](https://img.shields.io/badge/React-19-blue.svg?style=flat&logo=react)](https://react.dev/)
   [![Vite](https://img.shields.io/badge/Vite-8-646CFF.svg?style=flat&logo=vite)](https://vitejs.dev/)
   [![WebSockets](https://img.shields.io/badge/WebSockets-Live-00ff00.svg?style=flat)](#)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC.svg?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+  [![License](https://img.shields.io/badge/License-MIT-purple.svg?style=flat)](#)
 </div>
 
 <br />
 
-Nexus Command Center is a futuristic, immersive geospatial dashboard designed for monitoring global server networks, analyzing node health, and visualizing high-volume data streams. Inspired by sci-fi interfaces and built with bleeding-edge web technologies, it features both an interactive 3D WebGL globe and a highly detailed 2D topological map.
+OmniSight Command Center is a futuristic, immersive geospatial dashboard designed for monitoring global server networks, analyzing node health, and visualizing high-volume data streams. Inspired by sci-fi interfaces and built with bleeding-edge web technologies, it features both an interactive 3D WebGL globe and a highly detailed 2D topological map.
 
 ---
 
@@ -27,24 +28,33 @@ Click on any node (either on the 3D globe or 2D map) to view deep diagnostics, l
 
 ---
 
-## ✨ Core Features
+## ✨ Core Features & Breakdown
 
-* **🔌 Real-Time WebSocket Telemetry**
-  * A dedicated Node.js WebSocket backend streams live fluctuating latencies, throughput metrics, and dynamic server logs at 2000ms intervals directly into the React context.
-* **🌍 Interactive Maps (2D & 3D)**
-  * **3D WebGL Globe**: Powered by `react-globe.gl`. Features auto-rotation, glowing connection arcs, and a **"Click-to-Fly"** search engine that smoothly orbits to any physical address on Earth.
-  * **2D Flat Map**: Powered by `react-simple-maps` with smooth panning and zooming, overlaying a real-world terrain map.
-* **🎛️ Advanced Node Diagnostics**
-  * **MapToolkit Integration**: Uses real geocoding to resolve a node's exact location, elevation, and address based on its coordinates.
-  * **FastRouting (OSRM)**: Dynamically calculates the actual ground driving route vs. theoretical subsea fiber latency between datacenters.
-* **📜 Live System Logs**
-  * Streaming terminal of `INFO`, `WARN`, and `ALERT` security and network events, complete with filtering.
-* **🎨 "Glassmorphism" UI & Hack Mode**
-  * Translucent components with neon accents (Cyan/Purple), built entirely with raw Tailwind CSS 4 utilities.
-  * **Easter Egg**: Type `hack` anywhere on your keyboard to instantly trigger a system override, flipping the UI into a glowing Terminal Green matrix theme.
-* **⚡ Highly Optimized**
-  * **Lazy Loading**: The heavy 3D Globe component is lazily loaded via `React.Suspense` to ensure the initial app payload is tiny.
-  * **Rolldown Chunking**: Automated vendor chunking separates React, Three.js, Maps, and UI libraries into cacheable assets.
+OmniSight leverages a combination of WebSockets, WebGL, and advanced React hooks to deliver a zero-latency monitoring experience.
+
+### 🔌 Real-Time WebSocket Telemetry
+- **Live Data Ingestion:** A dedicated Node.js WebSocket backend streams live fluctuating latencies, throughput metrics, and dynamic server logs at 2000ms intervals directly into the React context.
+- **Event Filtering:** Instantly isolate critical errors or warnings from the noisy telemetry stream.
+
+### 🌍 Interactive Maps (2D & 3D)
+- **3D WebGL Globe (`react-globe.gl`):** Features auto-rotation, glowing connection arcs, and a **"Click-to-Fly"** search engine that smoothly orbits to any physical address on Earth.
+- **2D Flat Map (`react-simple-maps`):** D3-based SVG map with smooth panning and zooming, overlaying a real-world terrain map for precision tracking.
+
+### 🎛️ Advanced Node Diagnostics
+- **MapToolkit Integration:** Uses real geocoding to resolve a node's exact location, elevation, and address based on its coordinates.
+- **FastRouting (OSRM):** Dynamically calculates the actual ground driving route vs. theoretical subsea fiber latency between datacenters.
+
+### 📜 Live System Logs
+- **Streaming Terminal:** View `INFO`, `WARN`, and `ALERT` security and network events in a dedicated logs pane, complete with filtering and search capabilities.
+
+### 🎨 "Glassmorphism" UI & Hack Mode
+- **Cyberpunk Aesthetic:** Translucent components with neon accents (Cyan/Purple), built entirely with raw Tailwind CSS 4 utilities.
+- **System Override:** Type `hack` anywhere on your keyboard to instantly trigger a system override, flipping the UI into a glowing Terminal Green matrix theme.
+
+### ⚡ Highly Optimized
+- **React 19 Concurrent Features:** Leverages the latest concurrent rendering features for smooth UI updates even under heavy telemetry load.
+- **Lazy Loading:** The heavy 3D Globe component is lazily loaded via `React.Suspense` to ensure the initial app payload is tiny.
+- **Rolldown Chunking:** Automated vendor chunking separates React, Three.js, Maps, and UI libraries into cacheable assets.
 
 ---
 
@@ -71,8 +81,8 @@ Ensure you have Node.js (v18+ recommended) and `npm` installed. You will also ne
 ### 2. Installation
 Clone the repository and install dependencies:
 ```bash
-git clone https://github.com/amafjarkasi/nexus-command-center.git
-cd nexus-command-center
+git clone https://github.com/amafjarkasi/omnisight-command-center.git
+cd omnisight-command-center
 npm install
 ```
 
