@@ -84,7 +84,7 @@ export default function IntelligenceHub({ data }) {
               <circle cx="48" cy="48" r="40" fill="none" stroke={connAccent} strokeWidth="8"
                 strokeDasharray="251" strokeDashoffset={251 - (251 * globalConnectivity) / 100}
                 strokeLinecap="round"
-                style={{ transition: 'stroke-dashoffset 1s ease-out', filter: `drop-shadow(0 0 8px ${connAccent})` }}
+                style={{ transition: 'stroke-dashoffset 1s ease-out' }}
                 transform="rotate(-90 48 48)"
               />
             </svg>
@@ -148,8 +148,8 @@ export default function IntelligenceHub({ data }) {
             <AreaChart data={throughput} margin={{ top: 4, right: 2, left: -14, bottom: 0 }}>
               <defs>
                 <linearGradient id="tpGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%"  stopColor="#00f0ff" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#00f0ff" stopOpacity={0.01} />
+                  <stop offset="5%"  stopColor="#38bdf8" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#38bdf8" stopOpacity={0.01} />
                 </linearGradient>
               </defs>
               <XAxis
@@ -174,7 +174,7 @@ export default function IntelligenceHub({ data }) {
               />
               <ReferenceLine y={tpAnalytics.avg} stroke="rgba(255,255,255,0.15)" strokeDasharray="4 3" />
               <Tooltip content={<ThroughputTooltip />} />
-              <Area type="monotone" dataKey="value" stroke="#00f0ff" strokeWidth={2} fill="url(#tpGrad)" dot={false} isAnimationActive={false} />
+              <Area type="monotone" dataKey="value" stroke="#38bdf8" strokeWidth={2} fill="url(#tpGrad)" dot={false} isAnimationActive={false} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -182,7 +182,7 @@ export default function IntelligenceHub({ data }) {
         {/* Legend */}
         <div className="flex gap-4 mt-2">
           <div className="flex items-center gap-1.5">
-            <div className="w-5 h-0.5" style={{ background: '#00f0ff' }} />
+            <div className="w-5 h-0.5" style={{ background: '#38bdf8' }} />
             <span className="text-[10px] text-white/25 font-mono">live</span>
           </div>
           <div className="flex items-center gap-1.5">
@@ -227,7 +227,7 @@ export default function IntelligenceHub({ data }) {
                     style={{
                       width: `${Math.round(activity)}%`,
                       background: `linear-gradient(90deg, ${color}88, ${color})`,
-                      boxShadow: `0 0 10px ${color}55`,
+
                     }}
                   />
                 </div>

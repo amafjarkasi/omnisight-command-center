@@ -102,14 +102,14 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
   if (!node) return null;
 
   const isSuper     = node.type === 'super';
-  const accentColor = isSuper ? '#a855f7' : '#00f0ff';
+  const accentColor = isSuper ? '#8b5cf6' : '#38bdf8';
   const accentBg    = isSuper ? 'rgba(168,85,247,0.08)' : 'rgba(0,240,255,0.06)';
   const accentBorder = isSuper ? 'rgba(168,85,247,0.35)' : 'rgba(0,240,255,0.25)';
 
   return (
     <div
       className="glass-panel rounded-2xl overflow-hidden flex flex-col"
-      style={{ border: `1px solid ${accentBorder}`, boxShadow: `0 0 40px ${accentColor}18`, maxHeight: '85vh', overflowY: 'auto' }}
+      style={{ border: `1px solid ${accentBorder}`, maxHeight: '85vh', overflowY: 'auto' }}
     >
       {/* ── Header ── */}
       <div className="flex items-start justify-between p-4 pb-3" style={{ borderBottom: `1px solid ${accentBorder}`, background: accentBg }}>
