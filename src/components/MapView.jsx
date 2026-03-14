@@ -75,9 +75,9 @@ function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
         <>
           {/* Zoom controls */}
           <div className="absolute bottom-6 right-6 z-50 flex flex-col gap-1.5 pointer-events-auto">
-            <button aria-label="Zoom in" onClick={() => zoomIn()} className="p-2 glass-panel rounded-lg hover:bg-white/10 text-cyan-400 cursor-pointer"><ZoomIn size={15} /></button>
-            <button aria-label="Zoom out" onClick={() => zoomOut()} className="p-2 glass-panel rounded-lg hover:bg-white/10 text-cyan-400 cursor-pointer"><ZoomOut size={15} /></button>
-            <button aria-label="Reset zoom" onClick={() => resetTransform()} className="p-2 glass-panel rounded-lg hover:bg-white/10 text-cyan-400 cursor-pointer"><Maximize2 size={15} /></button>
+            <button aria-label="Zoom in" onClick={() => zoomIn()} className="p-2 glass-panel rounded-none hover:bg-white/10 text-cyan-400 cursor-pointer"><ZoomIn size={15} /></button>
+            <button aria-label="Zoom out" onClick={() => zoomOut()} className="p-2 glass-panel rounded-none hover:bg-white/10 text-cyan-400 cursor-pointer"><ZoomOut size={15} /></button>
+            <button aria-label="Reset zoom" onClick={() => resetTransform()} className="p-2 glass-panel rounded-none hover:bg-white/10 text-cyan-400 cursor-pointer"><Maximize2 size={15} /></button>
           </div>
 
           <TransformComponent
@@ -214,7 +214,7 @@ function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
                     top: `${Math.max(10, ((90 - hoveredNode.lat) / 180) * 660 - 64)}px`,
                     minWidth: 160,
                     borderLeft: `2px solid ${hoveredNode.type === 'super' ? '#a855f7' : '#00f0ff'}`,
-                    borderRadius: 10,
+                    borderRadius: 0,
                     padding: '8px 12px',
                   }}
                 >
@@ -251,7 +251,7 @@ export default function MapView({ nodes, onSelectNode, selectedNodeId, flyToRef,
     <div style={{ width: '100%', height: '100%', position: 'relative', background: '#020510', overflow: 'hidden' }}>
 
       {/* ── Node / link count badge (top-left) ── */}
-      <div className="absolute top-4 left-4 z-50 flex items-center gap-2 glass-panel px-3 py-1.5 rounded-full pointer-events-none select-none">
+      <div className="absolute top-4 left-4 z-50 flex items-center gap-2 glass-panel px-3 py-1.5 rounded-none pointer-events-none select-none">
         <Crosshair size={12} className="neon-text-cyan animate-pulse" />
         <span className="text-[9px] tracking-widest text-emerald-400 uppercase font-bold">
           {nodes.length} nodes · {connections.length} links
@@ -259,17 +259,17 @@ export default function MapView({ nodes, onSelectNode, selectedNodeId, flyToRef,
       </div>
 
       {/* ── View toggle (top-center) ── */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-auto flex glass-panel rounded-full p-1 gap-1">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-auto flex glass-panel rounded-none p-1 gap-1">
         <button
           onClick={() => setViewMode('3d')}
-          className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all cursor-pointer
+          className={`flex items-center gap-1.5 px-4 py-1.5 rounded-none text-[11px] font-bold uppercase tracking-widest transition-all cursor-pointer
             ${viewMode === '3d' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50' : 'text-white/40 hover:text-white/70'}`}
         >
           <Globe2 size={12} /> 3D Globe
         </button>
         <button
           onClick={() => setViewMode('2d')}
-          className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all cursor-pointer
+          className={`flex items-center gap-1.5 px-4 py-1.5 rounded-none text-[11px] font-bold uppercase tracking-widest transition-all cursor-pointer
             ${viewMode === '2d' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50' : 'text-white/40 hover:text-white/70'}`}
         >
           <MapIcon size={12} /> 2D Map

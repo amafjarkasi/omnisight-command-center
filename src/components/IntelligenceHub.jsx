@@ -29,7 +29,7 @@ function ThroughputTooltip({ active, payload }) {
   return (
     <div style={{
       background: 'rgba(2,5,20,0.96)', border: '1px solid rgba(0,240,255,0.3)',
-      borderRadius: 8, padding: '7px 12px', fontFamily: 'monospace', fontSize: 12, color: '#67e8f9',
+      borderRadius: 0, padding: '7px 12px', fontFamily: 'monospace', fontSize: 12, color: '#67e8f9',
     }}>
       {payload[0].value.toFixed(1)}<span style={{ color: 'rgba(255,255,255,0.4)', marginLeft: 4 }}>Mbps</span>
     </div>
@@ -58,7 +58,7 @@ export default function IntelligenceHub({ data }) {
   const connLabel  = { green: 'NOMINAL', amber: 'DEGRADED', red: 'CRITICAL' }[connStatus];
 
   return (
-    <div className="glass-panel flex flex-col h-full overflow-y-auto" style={{ borderRadius: 16, padding: 0 }}>
+    <div className="glass-panel flex flex-col h-full overflow-y-auto" style={{ borderRadius: 0, padding: 0 }}>
 
       {/* ── Header ── */}
       <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
@@ -71,7 +71,7 @@ export default function IntelligenceHub({ data }) {
         <div className="flex items-center justify-between mb-4">
           <span className="text-xs font-bold text-white/50 uppercase tracking-widest">Global Connectivity</span>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: connAccent }} />
+            <div className="w-2 h-2 rounded-none animate-pulse" style={{ background: connAccent }} />
             <span className="text-xs font-bold uppercase" style={{ color: connAccent }}>{connLabel}</span>
           </div>
         </div>
@@ -213,7 +213,7 @@ export default function IntelligenceHub({ data }) {
                   </div>
                   <div className="flex items-center gap-2">
                     <span
-                      className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded"
+                      className="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-none"
                       style={{ color, background: `${color}18`, border: `1px solid ${color}35` }}
                     >
                       {status}
@@ -221,9 +221,9 @@ export default function IntelligenceHub({ data }) {
                     <span className="text-sm font-mono font-bold text-white w-9 text-right">{Math.round(activity)}%</span>
                   </div>
                 </div>
-                <div className="relative h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
+                <div className="relative h-2 rounded-none overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
                   <div
-                    className="absolute inset-y-0 left-0 rounded-full transition-all duration-700"
+                    className="absolute inset-y-0 left-0 rounded-none transition-all duration-700"
                     style={{
                       width: `${Math.round(activity)}%`,
                       background: `linear-gradient(90deg, ${color}88, ${color})`,

@@ -13,7 +13,7 @@ function StatBadge(props) {
   const value = props.value;
   const color = props.color || 'text-cyan-400';
   return (
-    <div className="bg-white/[0.04] rounded-xl p-3.5 border border-white/[0.07] flex flex-col gap-2">
+    <div className="bg-white/[0.04] rounded-none p-3.5 border border-white/[0.07] flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <Icon size={13} className={color} />
         <span className="text-[10px] text-white/40 uppercase font-bold tracking-widest">{label}</span>
@@ -108,13 +108,13 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
 
   return (
     <div
-      className="glass-panel rounded-2xl overflow-hidden flex flex-col"
+      className="glass-panel rounded-none overflow-hidden flex flex-col"
       style={{ border: `1px solid ${accentBorder}`, maxHeight: '85vh', overflowY: 'auto' }}
     >
       {/* ── Header ── */}
       <div className="flex items-start justify-between p-4 pb-3" style={{ borderBottom: `1px solid ${accentBorder}`, background: accentBg }}>
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: accentBg, border: `1px solid ${accentColor}60` }}>
+          <div className="w-8 h-8 rounded-none flex items-center justify-center flex-shrink-0" style={{ background: accentBg, border: `1px solid ${accentColor}60` }}>
             <Server size={15} style={{ color: accentColor }} />
           </div>
           <div>
@@ -122,7 +122,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
             <div className="text-sm font-semibold text-white leading-tight mt-0.5">{node.name}</div>
           </div>
         </div>
-        <button aria-label="Close panel" onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer">
+        <button aria-label="Close panel" onClick={onClose} className="p-1.5 rounded-none hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer">
           <X size={14} />
         </button>
       </div>
@@ -140,10 +140,10 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, transparent 40%, rgba(2,5,20,0.95) 100%)' }} />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="relative">
-            <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center" style={{ borderColor: accentColor }}>
-              <div className="w-1 h-1 rounded-full" style={{ background: accentColor }} />
+            <div className="w-4 h-4 rounded-none border-2 flex items-center justify-center" style={{ borderColor: accentColor }}>
+              <div className="w-1 h-1 rounded-none" style={{ background: accentColor }} />
             </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full border opacity-40" style={{ borderColor: accentColor }} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-none border opacity-40" style={{ borderColor: accentColor }} />
           </div>
         </div>
         <div className="absolute bottom-2 left-3 text-[10px] font-mono text-white/50 pointer-events-none">
@@ -155,7 +155,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
       <div className="px-4 py-3" style={{ borderBottom: 'rgba(255,255,255,0.06) 1px solid' }}>
         {loading && (
           <div className="flex items-center gap-2 text-xs text-white/30 uppercase tracking-widest">
-            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: accentColor }} />
+            <div className="w-1.5 h-1.5 rounded-none animate-pulse" style={{ background: accentColor }} />
             Querying geographic data…
           </div>
         )}
@@ -168,7 +168,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
                 {geoInfo.city}{geoInfo.state ? `, ${geoInfo.state}` : ''}
               </span>
               {geoInfo.countryCode && (
-                <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded" style={{ background: accentBg, color: accentColor, border: `1px solid ${accentColor}40` }}>
+                <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-none" style={{ background: accentBg, color: accentColor, border: `1px solid ${accentColor}40` }}>
                   {geoInfo.countryCode}
                 </span>
               )}
@@ -209,7 +209,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
 
           {routeLoading && (
             <div className="px-4 flex items-center gap-2 text-xs text-white/25">
-              <div className="w-1.5 h-1.5 rounded-full animate-pulse bg-orange-400" />
+              <div className="w-1.5 h-1.5 rounded-none animate-pulse bg-orange-400" />
               Routing via FastRouting OSRM…
             </div>
           )}
@@ -221,7 +221,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
                 <>
                   {/* Road vs fiber comparison */}
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="bg-orange-500/[0.07] border border-orange-500/20 rounded-xl p-3 flex flex-col gap-1">
+                    <div className="bg-orange-500/[0.07] border border-orange-500/20 rounded-none p-3 flex flex-col gap-1">
                       <div className="flex items-center gap-1.5">
                         <Truck size={11} className="text-orange-400" />
                         <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Road</span>
@@ -234,7 +234,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
                           : `${routeInfo.duration_min} min`}
                       </div>
                     </div>
-                    <div className="bg-cyan-500/[0.07] border border-cyan-500/20 rounded-xl p-3 flex flex-col gap-1">
+                    <div className="bg-cyan-500/[0.07] border border-cyan-500/20 rounded-none p-3 flex flex-col gap-1">
                       <div className="flex items-center gap-1.5">
                         <Wifi size={11} className="text-cyan-400" />
                         <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Fiber</span>
@@ -249,7 +249,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
                     <div className="space-y-1.5">
                       <div className="text-[10px] text-white/25 uppercase tracking-widest font-bold mb-2">Turn-by-turn</div>
                       {routeInfo.steps.slice(0, 4).map((step, i) => (
-                        <div key={i} className="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-white/[0.03] transition-colors group">
+                        <div key={i} className="flex items-center gap-2.5 py-1 px-2 rounded-none hover:bg-white/[0.03] transition-colors group">
                           <span className="text-sm font-mono text-orange-400/80 w-4 text-center flex-shrink-0">{maneuverIcon(step.maneuver)}</span>
                           <span className="text-xs text-white/55 flex-1 truncate capitalize">{step.name || 'Continue'}</span>
                           <span className="text-[10px] font-mono text-white/25 flex-shrink-0">{fmtDist(step.distance_m)}</span>
@@ -265,7 +265,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
                 </>
               ) : (
                 /* Non-routable (intercontinental) — show haversine + fiber only */
-                <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-3 flex items-center gap-3">
+                <div className="bg-white/[0.03] border border-white/[0.06] rounded-none p-3 flex items-center gap-3">
                   <Wifi size={14} className="text-cyan-400 flex-shrink-0" />
                   <div>
                     <div className="text-xs text-white/50">Subsea cable · {routeInfo.haversine_km?.toLocaleString()} km</div>
@@ -289,7 +289,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
           <div key={label} className="flex justify-between items-center">
             <span className="text-xs text-white/35 uppercase tracking-widest font-bold">{label}</span>
             <span
-              className={`text-xs ${mono ? 'font-mono' : ''} ${accent ? 'px-2 py-1 rounded-lg' : 'text-white/75'}`}
+              className={`text-xs ${mono ? 'font-mono' : ''} ${accent ? 'px-2 py-1 rounded-none' : 'text-white/75'}`}
               style={accent ? { background: accentBg, color: accentColor } : {}}
             >
               {value}
@@ -302,7 +302,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
       <div className="p-4 pt-2">
         <button
           onClick={() => onDiagnostic(node)}
-          className="w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all cursor-pointer"
+          className="w-full py-2.5 rounded-none text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all cursor-pointer"
           style={{ background: `linear-gradient(135deg, ${accentColor}22, ${accentColor}08)`, border: `1px solid ${accentColor}50`, color: accentColor }}
           onMouseEnter={e => e.currentTarget.style.background = `${accentColor}28`}
           onMouseLeave={e => e.currentTarget.style.background = `linear-gradient(135deg, ${accentColor}22, ${accentColor}08)`}

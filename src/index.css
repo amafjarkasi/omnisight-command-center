@@ -1,24 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2547f4;
-  --color-accent-purple: #a855f7;
+  --color-primary: #10b981;
+  --color-accent-purple: #10b981;
   --color-background-light: #f5f6f8;
-  --color-background-dark: #0f172a;
+  --color-background-dark: #000000;
   --color-glass: rgba(255, 255, 255, 0.03);
   --color-glass-border: rgba(255, 255, 255, 0.1);
 
-  --font-display: "Inter", sans-serif;
+  --font-display: "Share Tech Mono", monospace;
 }
 
 :root {
-  --neon-cyan: #38bdf8;
-  --neon-blue: #3b82f6;
-  --neon-purple: #8b5cf6;
+  --neon-cyan: #10b981;
+  --neon-blue: #10b981;
+  --neon-purple: #f59e0b;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --bg-glass: #1e293b;
-  --border-glass: #334155;
+  --bg-glass: rgba(0, 0, 0, 0.8);
+  --border-glass: #10b981;
 }
 
 [data-theme="hack"] {
@@ -36,23 +36,29 @@
 
 @layer base {
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Share Tech Mono', monospace;
     -webkit-font-smoothing: antialiased;
     min-height: max(884px, 100dvh);
     background-color: var(--color-background-dark);
     color: white;
+    background-image: repeating-linear-gradient(
+      transparent 0,
+      transparent 2px,
+      rgba(16, 185, 129, 0.05) 2px,
+      rgba(16, 185, 129, 0.05) 4px
+    );
   }
 }
 
 @utility glass-card {
   background: var(--bg-glass);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
   
 @utility glass-panel {
   background: var(--bg-glass);
-  border: 1px solid var(--border-glass);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
 

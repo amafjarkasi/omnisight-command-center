@@ -22,7 +22,7 @@ export default function SystemLogs({ logs }) {
   return (
     <div
       className="glass-panel flex flex-col h-full pointer-events-auto"
-      style={{ borderRadius: 16, padding: 0, overflow: 'hidden' }}
+      style={{ borderRadius: 0, padding: 0, overflow: 'hidden' }}
     >
       {/* ── Header ── */}
       <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', flexShrink: 0 }}>
@@ -30,7 +30,7 @@ export default function SystemLogs({ logs }) {
           <Radio size={16} className="text-primary animate-pulse" />
           <span className="text-sm font-bold text-primary uppercase tracking-widest">System Events</span>
         </div>
-        <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-600/20 text-blue-300 border border-blue-500/25">
+        <span className="text-xs font-bold px-2.5 py-1 rounded-none bg-blue-600/20 text-blue-300 border border-blue-500/25">
           {logs.length} Total
         </span>
       </div>
@@ -39,7 +39,7 @@ export default function SystemLogs({ logs }) {
       <div className="flex gap-1.5 px-4 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)', flexShrink: 0, background: 'rgba(0,0,0,0.2)' }}>
         <button
           onClick={() => setFilter('ALL')}
-          className={`flex-1 text-xs font-bold py-1.5 rounded-lg transition-all cursor-pointer uppercase tracking-wide
+          className={`flex-1 text-xs font-bold py-1.5 rounded-none transition-all cursor-pointer uppercase tracking-wide
             ${filter === 'ALL' ? 'bg-primary/30 text-white border border-primary/50' : 'text-white/40 hover:bg-white/5 border border-transparent'}`}
         >
           All
@@ -51,7 +51,7 @@ export default function SystemLogs({ logs }) {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`flex-1 text-xs font-bold py-1.5 rounded-lg transition-all cursor-pointer uppercase tracking-wide border
+              className={`flex-1 text-xs font-bold py-1.5 rounded-none transition-all cursor-pointer uppercase tracking-wide border
                 ${active ? 'text-white' : 'text-white/40 hover:text-white/60 border-transparent hover:bg-white/[0.03]'}`}
               style={active ? { background: cfg.bg, borderColor: cfg.border, color: cfg.color } : {}}
             >
@@ -72,7 +72,7 @@ export default function SystemLogs({ logs }) {
               style={{
                 background: 'rgba(0,0,0,0.35)',
                 borderLeft: `3px solid ${cfg.color}`,
-                borderRadius: '0 10px 10px 0',
+                borderRadius: 0,
                 padding: '10px 14px',
                 flexShrink: 0,
                 animation: 'fadeInLog 0.25s ease-out',
