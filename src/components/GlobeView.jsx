@@ -6,6 +6,17 @@ import PropTypes from 'prop-types';
 const GLOBE_IMG = 'https://unpkg.com/three-globe@2/example/img/earth-night.jpg';
 const STARS_IMG = 'https://unpkg.com/three-globe@2/example/img/night-sky.png';
 
+
+const escapeHtml = (unsafe) => {
+  if (unsafe == null) return '';
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
 export default function GlobeView({ nodes, connections, onSelectNode, selectedNodeId, flyToRef }) {
   const globeRef = useRef(null);
   const containerRef = useRef(null);
@@ -102,9 +113,9 @@ export default function GlobeView({ nodes, connections, onSelectNode, selectedNo
       font-family:'Courier New',monospace;font-size:12px;line-height:1.6;
       box-shadow:0 0 20px ${node.type==='super'?'rgba(168,85,247,0.45)':'rgba(0,240,255,0.45)'}
     ">
-      <strong>${node.id}</strong><br/>
-      ${node.name}<br/>
-      <span style="color:rgba(255,255,255,0.45);font-size:10px">${node.region} · ${node.latency}ms · ${node.status}</span><br/>
+      <strong>${escapeHtml(node.id)}</strong><br/>
+      ${escapeHtml(node.name)}<br/>
+      <span style="color:rgba(255,255,255,0.45);font-size:10px">${escapeHtml(node.region)} · ${escapeHtml(node.latency)}ms · ${escapeHtml(node.status)}</span><br/>
       <span style="color:rgba(255,255,255,0.3);font-size:9px">${node.lat.toFixed(2)}°, ${node.lng.toFixed(2)}° — Click to inspect</span>
     </div>
   `, []);
