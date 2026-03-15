@@ -28,10 +28,13 @@ function ThroughputTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
   return (
     <div style={{
-      background: 'rgba(2,5,20,0.96)', border: '1px solid rgba(0,240,255,0.3)',
-      borderRadius: 0, padding: '7px 12px', fontFamily: 'monospace', fontSize: 12, color: '#67e8f9',
+      background: 'rgba(2,5,20,0.8)', border: '1px solid rgba(0,240,255,0.5)',
+      backdropFilter: 'blur(8px)',
+      boxShadow: '0 0 10px rgba(0, 240, 255, 0.2)',
+      borderRadius: 4, padding: '7px 12px', fontFamily: 'monospace', fontSize: 12, color: '#67e8f9',
+      transition: 'all 0.2s ease',
     }}>
-      {payload[0].value.toFixed(1)}<span style={{ color: 'rgba(255,255,255,0.4)', marginLeft: 4 }}>Mbps</span>
+      {payload[0].value.toFixed(1)}<span style={{ color: 'rgba(255,255,255,0.6)', marginLeft: 4, letterSpacing: '0.05em' }}>Mbps</span>
     </div>
   );
 }
@@ -58,7 +61,7 @@ export default function IntelligenceHub({ data }) {
   const connLabel  = { green: 'NOMINAL', amber: 'DEGRADED', red: 'CRITICAL' }[connStatus];
 
   return (
-    <div className="glass-panel flex flex-col h-full overflow-y-auto" style={{ borderRadius: 0, padding: 0 }}>
+    <div className="glass-panel flex flex-col h-full overflow-y-auto custom-scrollbar" style={{ borderRadius: 0, padding: 0 }}>
 
       {/* ── Header ── */}
       <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
@@ -76,7 +79,7 @@ export default function IntelligenceHub({ data }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 group transition-colors duration-300 hover:bg-white/5 p-2 -m-2 rounded-lg">
           {/* Ring */}
           <div style={{ position: 'relative', width: 96, height: 96, flexShrink: 0 }}>
             <svg width="96" height="96" viewBox="0 0 96 96">
@@ -174,7 +177,7 @@ export default function IntelligenceHub({ data }) {
               />
               <ReferenceLine y={tpAnalytics.avg} stroke="rgba(255,255,255,0.15)" strokeDasharray="4 3" />
               <Tooltip content={<ThroughputTooltip />} />
-              <Area type="monotone" dataKey="value" stroke="#38bdf8" strokeWidth={2} fill="url(#tpGrad)" dot={false} isAnimationActive={false} />
+              <Area type="monotone" dataKey="value" stroke="#38bdf8" strokeWidth={3} fill="url(#tpGrad)" dot={false} isAnimationActive={false} style={{ filter: 'drop-shadow(0px 0px 4px rgba(56, 189, 248, 0.6))' }} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -205,7 +208,7 @@ export default function IntelligenceHub({ data }) {
             const color = activityColor(activity);
             const status = activityLabel(activity);
             return (
-              <div key={region}>
+              <div key={region} className="group p-2 -mx-2 rounded-lg transition-colors duration-300 hover:bg-white/5 cursor-default">
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center gap-2">
                     <span className="text-base leading-none">{cfg.flag}</span>

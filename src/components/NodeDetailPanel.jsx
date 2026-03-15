@@ -13,12 +13,12 @@ function StatBadge(props) {
   const value = props.value;
   const color = props.color || 'text-cyan-400';
   return (
-    <div className="bg-white/[0.04] rounded-none p-3.5 border border-white/[0.07] flex flex-col gap-2">
+    <div className="bg-white/[0.04] rounded-none p-3.5 border border-white/[0.07] flex flex-col gap-2 group transition-all duration-300 hover:bg-white/[0.08] hover:border-white/[0.15] cursor-default">
       <div className="flex items-center gap-2">
-        <Icon size={13} className={color} />
-        <span className="text-[10px] text-white/40 uppercase font-bold tracking-widest">{label}</span>
+        <Icon size={13} className={`${color} transition-transform duration-300 group-hover:scale-110`} />
+        <span className="text-[10px] text-white/40 uppercase font-bold tracking-widest group-hover:text-white/60 transition-colors duration-300">{label}</span>
       </div>
-      <div className="text-base font-bold text-white font-mono leading-none">{value}</div>
+      <div className="text-base font-bold text-white font-mono leading-none group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transition-all duration-300">{value}</div>
     </div>
   );
 }
@@ -122,7 +122,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
             <div className="text-sm font-semibold text-white leading-tight mt-0.5">{node.name}</div>
           </div>
         </div>
-        <button aria-label="Close panel" onClick={onClose} className="p-1.5 rounded-none hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer">
+        <button aria-label="Close panel" onClick={onClose} className="p-1.5 rounded-none hover:bg-red-500/20 text-white/40 hover:text-red-400 hover:rotate-90 transition-all duration-300 cursor-pointer">
           <X size={14} />
         </button>
       </div>
@@ -302,10 +302,16 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
       <div className="p-4 pt-2">
         <button
           onClick={() => onDiagnostic(node)}
-          className="w-full py-2.5 rounded-none text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all cursor-pointer"
+          className="w-full py-2.5 rounded-none text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-[1.02]"
           style={{ background: `linear-gradient(135deg, ${accentColor}22, ${accentColor}08)`, border: `1px solid ${accentColor}50`, color: accentColor }}
-          onMouseEnter={e => e.currentTarget.style.background = `${accentColor}28`}
-          onMouseLeave={e => e.currentTarget.style.background = `linear-gradient(135deg, ${accentColor}22, ${accentColor}08)`}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = `${accentColor}35`;
+            e.currentTarget.style.textShadow = `0 0 8px ${accentColor}`;
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = `linear-gradient(135deg, ${accentColor}22, ${accentColor}08)`;
+            e.currentTarget.style.textShadow = 'none';
+          }}
         >
           ⬡ Initiate Diagnostic
         </button>

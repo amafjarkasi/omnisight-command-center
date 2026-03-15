@@ -52,26 +52,54 @@
 
 @utility glass-card {
   background: var(--bg-glass);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(16, 185, 129, 0.2);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 185, 129, 0.1);
+  transition: all 0.3s ease;
 }
   
 @utility glass-panel {
   background: var(--bg-glass);
+  backdrop-filter: blur(12px);
   border: 1px solid rgba(16, 185, 129, 0.3);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(16, 185, 129, 0.05);
 }
 
 @utility neon-text-cyan {
   color: var(--neon-cyan);
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
 }
 
 @utility neon-text-blue {
   color: var(--neon-blue);
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
 }
 
 @utility neon-text-purple {
   color: var(--neon-purple);
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+@utility custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(16, 185, 129, 0.5) rgba(0, 0, 0, 0.2);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(16, 185, 129, 0.5);
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(16, 185, 129, 0.8);
+  }
 }
 
 @utility no-scrollbar {
