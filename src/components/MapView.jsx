@@ -13,83 +13,33 @@ const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 // ── MapToolkit terrain background for 2D ──────────────────────────────────
 const TERRAIN_BG = `/maptoolkit-api/staticmap?center=20,10&zoom=1&size=1200x660&maptype=toursprung-terrain&apikey=${import.meta.env.VITE_MAPTOOLKIT_API_KEY}&factor=1`;
 
-
+// ── Haversine distance (km) ────────────────────────────────────────────────
+function haversine(a, b) {
+  const R = 6371;
+  const dLat = ((b.lat - a.lat) * Math.PI) / 180;
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+  const sin2 =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((a.lat * Math.PI) / 180) *
+      Math.cos((b.lat * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(sin2), Math.sqrt(1 - sin2));
+}
 
 // ── Connection builder ─────────────────────────────────────────────────────
 function buildConnections(nodes) {
   const conns = [];
   const used = new Set();
-
-  const n = nodes.length;
-  // Precompute lat/lng in radians for performance
-  const rads = new Array(n);
-  const PI_180 = Math.PI / 180;
-
-  for (let i = 0; i < n; i++) {
-    const node = nodes[i];
-    const latR = node.lat * PI_180;
-    const lngR = node.lng * PI_180;
-    rads[i] = {
-      node: node,
-      latR: latR,
-      lngR: lngR,
-      cosLatR: Math.cos(latR)
-    };
-  }
-
-  for (let i = 0; i < n; i++) {
-    const nodeData = rads[i];
-    const node = nodeData.node;
+  nodes.forEach(node => {
     const k = node.type === 'super' ? 4 : 2;
+    const nearest = nodes
+      .filter(n => n.id !== node.id)
+      .map(n => ({ target: n, dist: haversine(node, n) }))
+      .sort((a, b) => a.dist - b.dist)
+      .slice(0, k);
 
-    // Arrays for tracking top K
-    const topK_sin2 = new Float64Array(k);
-    for (let x=0; x<k; x++) topK_sin2[x] = Infinity;
-    const topK_idx = new Int32Array(k);
-    for (let x=0; x<k; x++) topK_idx[x] = -1;
-
-    for (let j = 0; j < n; j++) {
-      if (i === j) continue;
-
-      const targetData = rads[j];
-
-      const dLat_half = (targetData.latR - nodeData.latR) / 2;
-      const dLng_half = (targetData.lngR - nodeData.lngR) / 2;
-      const sin_dLat = Math.sin(dLat_half);
-      const sin_dLng = Math.sin(dLng_half);
-
-      const sin2 = sin_dLat * sin_dLat +
-        nodeData.cosLatR * targetData.cosLatR * sin_dLng * sin_dLng;
-
-      // Find worst in topK
-      let worstIdx = 0;
-      let worstSin2 = topK_sin2[0];
-      for (let x = 1; x < k; x++) {
-        if (topK_sin2[x] > worstSin2) {
-          worstSin2 = topK_sin2[x];
-          worstIdx = x;
-        }
-      }
-
-      // If better than worst, replace it
-      if (sin2 < worstSin2) {
-        topK_sin2[worstIdx] = sin2;
-        topK_idx[worstIdx] = j;
-      }
-    }
-
-    // Now process the top K
-    for (let x = 0; x < k; x++) {
-      const targetIdx = topK_idx[x];
-      if (targetIdx === -1) continue;
-
-      const target = rads[targetIdx].node;
-
-      // Optimization: use IDs for faster key
-      const id1 = node.id;
-      const id2 = target.id;
-      const key = id1 < id2 ? id1 + '|' + id2 : id2 + '|' + id1;
-
+    nearest.forEach(({ target }) => {
+      const key = [node.id, target.id].sort().join('|');
       if (!used.has(key)) {
         used.add(key);
         const isSuper = node.type === 'super' || target.type === 'super';
@@ -103,8 +53,8 @@ function buildConnections(nodes) {
             : ['rgba(0,240,255,0.0)', 'rgba(0,240,255,0.75)', 'rgba(0,240,255,0.0)'],
         });
       }
-    }
-  }
+    });
+  });
   return conns;
 }
 
