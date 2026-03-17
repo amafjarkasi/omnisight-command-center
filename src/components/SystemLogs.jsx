@@ -65,13 +65,14 @@ export default function SystemLogs({ logs }) {
       </div>
 
       {/* ── Log entries ── */}
-      <div className="flex-1 overflow-y-auto no-scrollbar px-3 py-2" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div className="flex-1 overflow-y-auto custom-scrollbar px-3 py-2" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {filteredLogs.map(log => {
           const cfg = TYPE_CONFIG[log.type] || TYPE_CONFIG.INFO;
           const Icon = cfg.icon;
           return (
             <div
               key={log.id}
+              className="group transition-all duration-300 hover:bg-white/10 hover:translate-x-1 cursor-default"
               style={{
                 background: 'rgba(0,0,0,0.35)',
                 borderLeft: `3px solid ${cfg.color}`,
@@ -83,12 +84,12 @@ export default function SystemLogs({ logs }) {
             >
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2">
-                  <Icon size={13} style={{ color: cfg.color, flexShrink: 0 }} />
-                  <span className="text-xs font-bold tracking-wider" style={{ color: cfg.color }}>{log.type}</span>
+                  <Icon size={13} className="transition-transform duration-300 group-hover:scale-110" style={{ color: cfg.color, flexShrink: 0 }} />
+                  <span className="text-xs font-bold tracking-wider" style={{ color: cfg.color, textShadow: `0 0 8px ${cfg.color}80` }}>{log.type}</span>
                 </div>
-                <span className="text-[11px] text-white/35 font-mono">{formatTime(log.timestamp)}</span>
+                <span className="text-[11px] text-white/35 font-mono group-hover:text-white/60 transition-colors duration-300">{formatTime(log.timestamp)}</span>
               </div>
-              <div className="text-sm text-white/80 leading-snug">{log.message}</div>
+              <div className="text-sm text-white/80 leading-snug group-hover:text-white transition-colors duration-300">{log.message}</div>
             </div>
           );
         })}
