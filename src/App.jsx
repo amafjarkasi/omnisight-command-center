@@ -3,17 +3,20 @@ import MapView from './components/MapView';
 import IntelligenceHub from './components/IntelligenceHub';
 import SystemLogs from './components/SystemLogs';
 import NodeDetailPanel from './components/NodeDetailPanel';
+import TerminalOverlay from './components/TerminalOverlay';
 import { useMockData } from './hooks/useMockData';
-import { Server, Search, X, MapPin } from 'lucide-react';
+import { Server, Search, X, MapPin, Terminal as TerminalIcon } from 'lucide-react';
 import { geocodeSearch } from './services/maptoolkit';
+import { audio } from './services/audio';
 
 export default function App() {
-  const { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, activeThreats = [], pushLog } = useMockData();
+  const { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, activeThreats = [], pushLog, dispatchCommand } = useMockData();
   const [selectedNode, setSelectedNode] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [geocodeSuggestions, setGeocodeSuggestions] = useState([]);
   const [searchFocused, setSearchFocused] = useState(false);
   const [viewMode, setViewMode] = useState('2d');
+  const [showTerminal, setShowTerminal] = useState(false);
   const flyToRef = useRef(null);
   const geocodeDebounce = useRef(null);
 
@@ -26,7 +29,8 @@ export default function App() {
   const handleDiagnostic = useCallback((node) => {
     pushLog('ALERT', `Diagnostic initiated on ${node.id} (${node.ip}) — ${node.region}`);
     pushLog('INFO', `Geo-ping sequence started for ${node.name}`);
-  }, [pushLog]);
+    dispatchCommand(`ping ${node.ip}`);
+  }, [pushLog, dispatchCommand]);
 
   const hubData = { globalConnectivity, throughput, regionalActivity, activeThreats };
 
@@ -124,6 +128,10 @@ export default function App() {
         pushLog('ALERT', isHack ? 'SYSTEM RESTORED TO NORMAL PARAMETERS' : 'SYSTEM OVERRIDE: HACK MODE ENGAGED');
         keyBuffer = '';
       }
+      if (keyBuffer === 'term') {
+         setShowTerminal(true);
+         keyBuffer = '';
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -148,6 +156,9 @@ export default function App() {
         </div>
       )}
 
+      {showTerminal && (
+         <TerminalOverlay onClose={() => setShowTerminal(false)} wsCommandDispatcher={dispatchCommand} pushLog={pushLog} />
+      )}
 
       {/* ── Full-screen globe/map ── */}
       <div className="absolute inset-0 z-0 pointer-events-auto">
@@ -188,7 +199,7 @@ export default function App() {
               placeholder="Search nodes, IPs, or fly to any location…"
             />
             {searchQuery && (
-              <button aria-label="Clear search" onClick={clearSearch} className="mr-3 text-white/30 hover:text-white cursor-pointer">
+              <button aria-label="Clear search" onClick={() => { audio.click(); clearSearch(); }} onMouseEnter={() => audio.hover()} className="mr-3 text-white/30 hover:text-white cursor-pointer">
                 <X size={13} />
               </button>
             )}
@@ -203,7 +214,7 @@ export default function App() {
               {geocodeSuggestions.map(s => (
                 <button
                   key={s.place_id}
-                  onClick={() => handleGeoSuggestion(s)}
+                  onClick={() => { audio.click(); handleGeoSuggestion(s); }} onMouseEnter={() => audio.hover()}
                   className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-white/05 text-left transition-colors cursor-pointer border-b border-white/[0.04] last:border-none"
                 >
                   <MapPin size={12} className="text-cyan-400 flex-shrink-0" />
@@ -233,9 +244,17 @@ export default function App() {
             </div>
           )}
           <button
+            aria-label="Open Terminal"
+            className="relative flex size-10 items-center justify-center rounded-none glass-card text-primary border border-primary/35 hover:bg-primary/20 transition-colors cursor-pointer"
+            onClick={() => { audio.click(); setShowTerminal(true); }} onMouseEnter={() => audio.hover()}
+            title="Open Terminal"
+          >
+             <TerminalIcon size={17} />
+          </button>
+          <button
             aria-label="Clear selected node"
             className="relative flex size-10 items-center justify-center rounded-none glass-card text-primary border border-primary/35 hover:bg-primary/20 transition-colors cursor-pointer"
-            onClick={() => setSelectedNode(null)}
+            onClick={() => { audio.click(); setSelectedNode(null); }} onMouseEnter={() => audio.hover()}
             title="Clear selected node"
           >
             <Server size={17} />

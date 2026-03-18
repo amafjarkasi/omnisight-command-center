@@ -190,6 +190,48 @@ wss.on('connection', (ws) => {
     }));
   }, 2000);
 
+
+  ws.on('message', (message) => {
+    try {
+      const data = JSON.parse(message);
+      if (data.type === 'COMMAND') {
+        console.log(`Received command: ${data.command}`);
+        const cmd = data.command.toLowerCase();
+
+        let responseMsg = '';
+        if (cmd.startsWith('ping')) {
+          const target = data.command.split(' ')[1] || 'unknown';
+          responseMsg = `PING ${target} (56 data bytes). 64 bytes from ${target}: icmp_seq=1 ttl=64 time=12.4 ms`;
+        } else if (cmd.startsWith('scenario')) {
+          const scenario = data.command.split(' ')[1] || 'default';
+          responseMsg = `Executing scenario: ${scenario}`;
+
+          if (activeNodes.length > 0) {
+            const targetNode = activeNodes[Math.floor(Math.random() * activeNodes.length)];
+            activeThreats.push({
+              id: `THREAT-${Date.now()}`,
+              type: `SIMULATED ${scenario.toUpperCase()}`,
+              source: { lat: (Math.random() * 160) - 80, lng: (Math.random() * 360) - 180 },
+              targetId: targetNode.id,
+              timestamp: Date.now()
+            });
+          }
+        } else {
+          responseMsg = `Command received: ${data.command}`;
+        }
+
+        ws.send(JSON.stringify({
+          type: 'TICK',
+          payload: {
+            log: { id: Date.now(), type: 'INFO', timestamp: new Date().toISOString(), message: responseMsg }
+          }
+        }));
+      }
+    } catch (err) {
+      console.error('Error parsing WS message', err);
+    }
+  });
+
   ws.on('close', () => {
     clearInterval(interval);
     console.log('Client disconnected');
