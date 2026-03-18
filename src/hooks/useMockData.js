@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 function generateInitialThroughput() {
   const initialThroughput = [];
@@ -17,13 +17,15 @@ export function useMockData() {
   const [regionalActivity, setRegionalActivity] = useState([]);
   const [activeThreats, setActiveThreats] = useState([]);
 
+  const wsRef = useRef(null);
+
   useEffect(() => {
-    let ws;
     let wsConnectTimeout;
 
     const connectWS = () => {
-      // Connect to our new backend!
-      ws = new WebSocket(import.meta.env.VITE_WS_URL || 'ws://localhost:8080');
+      const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8080';
+      const ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
 
       ws.onopen = () => {
         setSystemLogs(prev => [{ id: Date.now(), type: 'INFO', timestamp: new Date(), message: 'Connected to Live Telemetry Stream' }, ...prev]);
@@ -81,13 +83,22 @@ export function useMockData() {
 
     return () => {
       clearTimeout(wsConnectTimeout);
-      if (ws) ws.close();
+      if (wsRef.current) wsRef.current.close();
     };
   }, []);
 
-  const pushLog = (type, message) => {
+  const pushLog = useCallback((type, message) => {
     setSystemLogs(prev => [{ id: Date.now(), type, timestamp: new Date(), message }, ...prev.slice(0, 49)]);
-  };
+  }, []);
 
-  return { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, activeThreats, pushLog };
+  const dispatchCommand = useCallback((command) => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: 'COMMAND', command }));
+      pushLog('INFO', `Dispatched remote command: ${command}`);
+    } else {
+      pushLog('WARN', `Failed to dispatch command: WebSocket not connected.`);
+    }
+  }, [pushLog]);
+
+  return { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, activeThreats, pushLog, dispatchCommand };
 }

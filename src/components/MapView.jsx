@@ -3,6 +3,7 @@ import { Crosshair, Globe2, Map as MapIcon, ZoomIn, ZoomOut, Maximize2 } from 'l
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import PropTypes from 'prop-types';
+import { audio } from '../services/audio';
 
 // Lazy load the heavy 3D globe component
 const GlobeView = React.lazy(() => import('./GlobeView'));
@@ -98,9 +99,9 @@ function FlatMapView({ nodes, connections, threats = [], onSelectNode, selectedN
         <>
           {/* Zoom controls */}
           <div className="absolute bottom-6 right-6 z-50 flex flex-col gap-1.5 pointer-events-auto">
-            <button aria-label="Zoom in" onClick={() => zoomIn()} className="p-2 glass-panel rounded-none hover:bg-white/10 text-cyan-400 cursor-pointer"><ZoomIn size={15} /></button>
-            <button aria-label="Zoom out" onClick={() => zoomOut()} className="p-2 glass-panel rounded-none hover:bg-white/10 text-cyan-400 cursor-pointer"><ZoomOut size={15} /></button>
-            <button aria-label="Reset zoom" onClick={() => resetTransform()} className="p-2 glass-panel rounded-none hover:bg-white/10 text-cyan-400 cursor-pointer"><Maximize2 size={15} /></button>
+            <button aria-label="Zoom in" onClick={() => { audio.click(); zoomIn(); }} onMouseEnter={() => audio.hover()} className="p-2 glass-panel rounded-none hover:bg-white/10 text-cyan-400 cursor-pointer"><ZoomIn size={15} /></button>
+            <button aria-label="Zoom out" onClick={() => { audio.click(); zoomOut(); }} onMouseEnter={() => audio.hover()} className="p-2 glass-panel rounded-none hover:bg-white/10 text-cyan-400 cursor-pointer"><ZoomOut size={15} /></button>
+            <button aria-label="Reset zoom" onClick={() => { audio.click(); resetTransform(); }} onMouseEnter={() => audio.hover()} className="p-2 glass-panel rounded-none hover:bg-white/10 text-cyan-400 cursor-pointer"><Maximize2 size={15} /></button>
           </div>
 
           <TransformComponent
@@ -216,7 +217,7 @@ function FlatMapView({ nodes, connections, threats = [], onSelectNode, selectedN
                         cursor="pointer"
                         onMouseEnter={() => setHoveredNode(node)}
                         onMouseLeave={() => setHoveredNode(null)}
-                        onClick={e => { e.stopPropagation(); onSelectNode(node); }}
+                        onClick={e => { audio.click(); e.stopPropagation(); onSelectNode(node); }} onMouseEnter={() => audio.hover()}
                       />
                       {/* Invisible large hit area for easier clicking */}
                       <circle
@@ -226,7 +227,7 @@ function FlatMapView({ nodes, connections, threats = [], onSelectNode, selectedN
                         cursor="pointer"
                         onMouseEnter={() => setHoveredNode(node)}
                         onMouseLeave={() => setHoveredNode(null)}
-                        onClick={e => { e.stopPropagation(); onSelectNode(node); }}
+                        onClick={e => { audio.click(); e.stopPropagation(); onSelectNode(node); }} onMouseEnter={() => audio.hover()}
                       />
                       {/* Label */}
                       {(isSelected || isHovered || isSuper) && (
@@ -304,14 +305,14 @@ export default function MapView({ nodes, threats = [], onSelectNode, selectedNod
       {/* ── View toggle (top-center) ── */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-auto flex glass-panel rounded-none p-1 gap-1">
         <button
-          onClick={() => setViewMode('3d')}
+          onClick={() => { audio.click(); setViewMode('3d'); }} onMouseEnter={() => audio.hover()}
           className={`flex items-center gap-1.5 px-4 py-1.5 rounded-none text-[11px] font-bold uppercase tracking-widest transition-all cursor-pointer
             ${viewMode === '3d' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50' : 'text-white/40 hover:text-white/70'}`}
         >
           <Globe2 size={12} /> 3D Globe
         </button>
         <button
-          onClick={() => setViewMode('2d')}
+          onClick={() => { audio.click(); setViewMode('2d'); }} onMouseEnter={() => audio.hover()}
           className={`flex items-center gap-1.5 px-4 py-1.5 rounded-none text-[11px] font-bold uppercase tracking-widest transition-all cursor-pointer
             ${viewMode === '2d' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50' : 'text-white/40 hover:text-white/70'}`}
         >
