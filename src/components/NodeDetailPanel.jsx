@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   X, Activity, Zap, Globe, MapPin, Mountain, Navigation,
-  Server, Truck, Route, Clock, Wifi, ChevronRight,
+  Server, Truck, Route, Clock, Wifi, ChevronRight, ShieldAlert,
 } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { reverseGeocode, getElevation, staticMapUrl, fastRoute } from '../services/maptoolkit';
+import { LineChart, Line, ResponsiveContainer, YAxis } from 'recharts';
+
 
 // ── Stat badge ────────────────────────────────────────────────────────────
 function StatBadge(props) {
@@ -38,8 +40,22 @@ function fmtDist(m) {
   return m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${m} m`;
 }
 
+
+function Sparkline({ data, color }) {
+  return (
+    <div className="h-10 w-full mt-1 opacity-70">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <YAxis domain={[0, 100]} hide />
+          <Line type="monotone" dataKey="value" stroke={color} strokeWidth={2} dot={false} isAnimationActive={false} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
 // ── Main component ────────────────────────────────────────────────────────
-export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnostic, pushLog }) {
+export default function NodeDetailPanel({ node, nearestNode, threats = [], onClose, onDiagnostic, pushLog }) {
   const [geoInfo, setGeoInfo]     = useState(null);
   const [elevation, setElevation] = useState(null);
   const [mapImg, setMapImg]       = useState(null);
@@ -47,6 +63,7 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
   const [loading, setLoading]     = useState(false);
   const [routeLoading, setRouteLoading] = useState(false);
   const [error, setError]         = useState(null);
+  const [metrics, setMetrics]     = useState({ cpu: [], mem: [] });
 
   // ── Geo + map + elevation fetch ──────────────────────────────────────────
   const fetchGeoData = useCallback(async () => {
@@ -99,12 +116,30 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
   useEffect(() => { fetchGeoData(); }, [fetchGeoData]);
   useEffect(() => { fetchRoute();   }, [fetchRoute]);
 
+  useEffect(() => {
+    if(!node) return;
+    // initial data
+    const initial = Array.from({length: 15}, () => ({ value: 30 + Math.random() * 40 }));
+    setMetrics({ cpu: initial, mem: initial.map(v => ({value: v.value - 10})) });
+
+    const int = setInterval(() => {
+       setMetrics(prev => ({
+          cpu: [...prev.cpu.slice(1), { value: Math.min(100, Math.max(0, prev.cpu[prev.cpu.length-1].value + (Math.random()*10 - 5))) }],
+          mem: [...prev.mem.slice(1), { value: Math.min(100, Math.max(0, prev.mem[prev.mem.length-1].value + (Math.random()*6 - 3))) }]
+       }));
+    }, 2000);
+    return () => clearInterval(int);
+  }, [node]);
+
+
   if (!node) return null;
 
   const isSuper     = node.type === 'super';
   const accentColor = isSuper ? '#8b5cf6' : '#38bdf8';
-  const accentBg    = isSuper ? 'rgba(168,85,247,0.08)' : 'rgba(0,240,255,0.06)';
-  const accentBorder = isSuper ? 'rgba(168,85,247,0.35)' : 'rgba(0,240,255,0.25)';
+  const isThreatened = threats.some(t => t.targetId === node.id);
+  const accentBg    = isThreatened ? 'rgba(239,68,68,0.15)' : isSuper ? 'rgba(168,85,247,0.08)' : 'rgba(0,240,255,0.06)';
+  const accentBorder = isThreatened ? 'rgba(239,68,68,0.5)' : isSuper ? 'rgba(168,85,247,0.35)' : 'rgba(0,240,255,0.25)';
+  const activeColor = isThreatened ? '#ef4444' : accentColor;
 
   return (
     <div
@@ -115,10 +150,10 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
       <div className="flex items-start justify-between p-4 pb-3" style={{ borderBottom: `1px solid ${accentBorder}`, background: accentBg }}>
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-none flex items-center justify-center flex-shrink-0" style={{ background: accentBg, border: `1px solid ${accentColor}60` }}>
-            <Server size={15} style={{ color: accentColor }} />
+            <Server size={15} style={{ color: activeColor }} />
           </div>
           <div>
-            <div className="text-xs tracking-widest font-bold" style={{ color: accentColor }}>{node.id}</div>
+            <div className="text-xs tracking-widest font-bold" style={{ color: activeColor }}>{node.id}</div>
             <div className="text-sm font-semibold text-white leading-tight mt-0.5">{node.name}</div>
           </div>
         </div>
@@ -126,6 +161,33 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
           <X size={14} />
         </button>
       </div>
+
+
+      {/* ── Threat Warning ── */}
+      {isThreatened && (
+        <div className="bg-red-500/20 border-y border-red-500/50 p-3 flex items-start gap-3 threat-indicator">
+          <ShieldAlert size={16} className="text-red-400 flex-shrink-0 animate-pulse mt-0.5" />
+          <div className="flex-1">
+             <div className="text-xs font-bold text-red-400 uppercase tracking-widest glitch-text">Active Threat Detected</div>
+             <div className="text-[10px] text-red-300/70 mt-1 leading-tight">Node under active cyberattack. Mitigation protocols suggested.</div>
+
+             <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => pushLog('ALERT', `ISOLATION INITIATED: ${node.id} quarantined.`)}
+                  className="px-2 py-1 bg-red-500/10 border border-red-500/30 text-red-400 text-[9px] uppercase font-bold hover:bg-red-500/30 transition-colors"
+                >
+                  Isolate
+                </button>
+                <button
+                  onClick={() => pushLog('WARN', `TRAFFIC REROUTED: ${node.id} -> ${nearestNode?.id || 'Secondary'}.`)}
+                  className="px-2 py-1 bg-orange-500/10 border border-orange-500/30 text-orange-400 text-[9px] uppercase font-bold hover:bg-orange-500/30 transition-colors"
+                >
+                  Reroute
+                </button>
+             </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Static Map Thumbnail ── */}
       <div className="relative overflow-hidden" style={{ height: 110, background: '#0a0f1e' }}>
@@ -163,12 +225,12 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
         {geoInfo && (
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <MapPin size={12} style={{ color: accentColor }} className="flex-shrink-0" />
+              <MapPin size={12} style={{ color: activeColor }} className="flex-shrink-0" />
               <span className="text-sm text-white/80 font-medium leading-tight">
                 {geoInfo.city}{geoInfo.state ? `, ${geoInfo.state}` : ''}
               </span>
               {geoInfo.countryCode && (
-                <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-none" style={{ background: accentBg, color: accentColor, border: `1px solid ${accentColor}40` }}>
+                <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-none" style={{ background: accentBg, color: activeColor, border: `1px solid ${accentColor}40` }}>
                   {geoInfo.countryCode}
                 </span>
               )}
@@ -195,6 +257,25 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
           <StatBadge icon={Mountain} label="Elevation" value={`${elevation} m`} color="text-emerald-400" />
         )}
         <StatBadge icon={Server} label="Status" value={node.status} color={node.status === 'Online' ? 'text-emerald-400' : 'text-yellow-400'} />
+      </div>
+
+
+      {/* ── Advanced Metrics ── */}
+      <div className="px-4 pb-4 grid grid-cols-2 gap-4" style={{ paddingTop: 10, borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+        <div className="bg-white/[0.03] p-2 border border-white/[0.05]">
+           <div className="flex justify-between items-end">
+             <span className="text-[10px] uppercase font-bold text-white/40 tracking-widest">CPU LOAD</span>
+             <span className="text-xs font-mono text-cyan-300">{metrics.cpu.length ? metrics.cpu[metrics.cpu.length-1].value.toFixed(1) : 0}%</span>
+           </div>
+           <Sparkline data={metrics.cpu} color="#22d3ee" />
+        </div>
+        <div className="bg-white/[0.03] p-2 border border-white/[0.05]">
+           <div className="flex justify-between items-end">
+             <span className="text-[10px] uppercase font-bold text-white/40 tracking-widest">MEM USAGE</span>
+             <span className="text-xs font-mono text-purple-300">{metrics.mem.length ? metrics.mem[metrics.mem.length-1].value.toFixed(1) : 0}%</span>
+           </div>
+           <Sparkline data={metrics.mem} color="#c084fc" />
+        </div>
       </div>
 
       {/* ── FastRouting Ground Route ── */}
@@ -303,13 +384,13 @@ export default function NodeDetailPanel({ node, nearestNode, onClose, onDiagnost
         <button
           onClick={() => onDiagnostic(node)}
           className="w-full py-2.5 rounded-none text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-[1.02]"
-          style={{ background: `linear-gradient(135deg, ${accentColor}22, ${accentColor}08)`, border: `1px solid ${accentColor}50`, color: accentColor }}
+          style={{ background: `linear-gradient(135deg, ${activeColor}22, ${activeColor}08)`, border: `1px solid ${activeColor}50`, color: activeColor }}
           onMouseEnter={e => {
-            e.currentTarget.style.background = `${accentColor}35`;
-            e.currentTarget.style.textShadow = `0 0 8px ${accentColor}`;
+            e.currentTarget.style.background = `${activeColor}35`;
+            e.currentTarget.style.textShadow = `0 0 8px ${activeColor}`;
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.background = `linear-gradient(135deg, ${accentColor}22, ${accentColor}08)`;
+            e.currentTarget.style.background = `linear-gradient(135deg, ${activeColor}22, ${activeColor}08)`;
             e.currentTarget.style.textShadow = 'none';
           }}
         >
@@ -324,6 +405,7 @@ NodeDetailPanel.propTypes = {
   node: PropTypes.object,
   nearestNode: PropTypes.object,
   onClose: PropTypes.func.isRequired,
+  threats: PropTypes.array,
   onDiagnostic: PropTypes.func.isRequired,
   pushLog: PropTypes.func,
 };

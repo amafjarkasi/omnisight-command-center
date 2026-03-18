@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 function generateInitialThroughput() {
   const initialThroughput = [];
@@ -15,6 +15,9 @@ export function useMockData() {
   const [systemLogs, setSystemLogs] = useState([]);
   const [activeNodes, setActiveNodes] = useState([]);
   const [regionalActivity, setRegionalActivity] = useState([]);
+  const [activeThreats, setActiveThreats] = useState([]);
+  const [cmdResponse, setCmdResponse] = useState(null);
+  const wsRef = useRef(null);
 
   useEffect(() => {
     let ws;
@@ -23,6 +26,7 @@ export function useMockData() {
     const connectWS = () => {
       // Connect to our new backend!
       ws = new WebSocket(import.meta.env.VITE_WS_URL || 'ws://localhost:8080');
+      wsRef.current = ws;
 
       ws.onopen = () => {
         setSystemLogs(prev => [{ id: Date.now(), type: 'INFO', timestamp: new Date(), message: 'Connected to Live Telemetry Stream' }, ...prev]);
@@ -31,7 +35,9 @@ export function useMockData() {
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
         
-        if (data.type === 'INIT') {
+        if (data.type === 'CMD_RESPONSE') {
+          setCmdResponse(data);
+        } else if (data.type === 'INIT') {
           setActiveNodes(data.nodes);
         } else if (data.type === 'TICK') {
           const { payload } = data;
@@ -50,6 +56,10 @@ export function useMockData() {
             setRegionalActivity(payload.regionalActivity);
           }
           
+          if (payload.activeThreats) {
+            setActiveThreats(payload.activeThreats);
+          }
+
           if (payload.nodeUpdates) {
             setActiveNodes(prev => prev.map(node => {
               const update = payload.nodeUpdates.find(u => u.id === node.id);
@@ -84,5 +94,15 @@ export function useMockData() {
     setSystemLogs(prev => [{ id: Date.now(), type, timestamp: new Date(), message }, ...prev.slice(0, 49)]);
   };
 
-  return { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, pushLog };
+
+
+  const sendCommand = useCallback((cmd) => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: 'COMMAND', payload: cmd }));
+    } else {
+      setCmdResponse({ payload: { text: 'Error: Terminal disconnected from Core.', success: false }, original: cmd });
+    }
+  }, []);
+
+  return { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, activeThreats, pushLog, sendCommand, cmdResponse };
 }
