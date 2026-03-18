@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { reverseGeocode, getElevation, staticMapUrl, fastRoute } from '../services/maptoolkit';
+import { audio } from '../services/audio';
 
 // ── Stat badge ────────────────────────────────────────────────────────────
 function StatBadge(props) {
@@ -124,7 +125,7 @@ export default function NodeDetailPanel({ node, nearestNode, threats = [], onClo
             <div className="text-sm font-semibold text-white leading-tight mt-0.5">{node.name}</div>
           </div>
         </div>
-        <button aria-label="Close panel" onClick={onClose} className="p-1.5 rounded-none hover:bg-red-500/20 text-white/40 hover:text-red-400 hover:rotate-90 transition-all duration-300 cursor-pointer">
+        <button aria-label="Close panel" onClick={() => { audio.click(); onClose(); }} onMouseEnter={() => audio.hover()} className="p-1.5 rounded-none hover:bg-red-500/20 text-white/40 hover:text-red-400 hover:rotate-90 transition-all duration-300 cursor-pointer">
           <X size={14} />
         </button>
       </div>
@@ -140,13 +141,13 @@ export default function NodeDetailPanel({ node, nearestNode, threats = [], onClo
 
              <div className="flex gap-2 mt-2">
                 <button
-                  onClick={() => pushLog('ALERT', `ISOLATION INITIATED: ${node.id} quarantined.`)}
+                  onClick={() => { audio.alert(); pushLog('ALERT', `ISOLATION INITIATED: ${node.id} quarantined.`); }} onMouseEnter={() => audio.hover()}
                   className="px-2 py-1 bg-red-500/10 border border-red-500/30 text-red-400 text-[9px] uppercase font-bold hover:bg-red-500/30 transition-colors"
                 >
                   Isolate
                 </button>
                 <button
-                  onClick={() => pushLog('WARN', `TRAFFIC REROUTED: ${node.id} -> ${nearestNode?.id || 'Secondary'}.`)}
+                  onClick={() => { audio.warning(); pushLog('WARN', `TRAFFIC REROUTED: ${node.id} -> ${nearestNode?.id || 'Secondary'}.`); }} onMouseEnter={() => audio.hover()}
                   className="px-2 py-1 bg-orange-500/10 border border-orange-500/30 text-orange-400 text-[9px] uppercase font-bold hover:bg-orange-500/30 transition-colors"
                 >
                   Reroute
@@ -330,7 +331,7 @@ export default function NodeDetailPanel({ node, nearestNode, threats = [], onClo
       {/* ── CTA ── */}
       <div className="p-4 pt-2">
         <button
-          onClick={() => onDiagnostic(node)}
+          onClick={() => { audio.click(); onDiagnostic(node); }} onMouseEnter={() => audio.hover()}
           className="w-full py-2.5 rounded-none text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-[1.02]"
           style={{ background: `linear-gradient(135deg, ${activeColor}22, ${activeColor}08)`, border: `1px solid ${activeColor}50`, color: activeColor }}
           onMouseEnter={e => {
