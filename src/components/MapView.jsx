@@ -82,7 +82,7 @@ function buildConnections(nodes) {
 }
 
 // ── 2D Flat Map View ───────────────────────────────────────────────────────
-function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
+function FlatMapView({ nodes, connections, threats = [], onSelectNode, selectedNodeId }) {
   const [hoveredNode, setHoveredNode] = useState(null);
 
   return (
@@ -149,6 +149,24 @@ function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
                 </Geographies>
 
                 {/* Connection lines — rendered as SVG curves */}
+                {threats.map((t, i) => {
+                  const targetNode = nodes.find(n => n.id === t.targetId);
+                  if (!targetNode) return null;
+                  return (
+                    <line
+                      key={`threat-${i}`}
+                      x1={`${((t.source.lng + 180) / 360) * 100}%`}
+                      y1={`${((90 - t.source.lat) / 180) * 100}%`}
+                      x2={`${((targetNode.lng + 180) / 360) * 100}%`}
+                      y2={`${((90 - targetNode.lat) / 180) * 100}%`}
+                      stroke="rgba(239, 68, 68, 0.8)"
+                      strokeWidth={1.5}
+                      strokeDasharray="4 2"
+                      style={{ filter: 'drop-shadow(0 0 4px rgba(239,68,68,0.5))' }}
+                    />
+                  );
+                })}
+
                 {connections.map((conn, i) => {
                   // Simple straight-line connections within the SVG coordinate system
                   return (
@@ -170,20 +188,21 @@ function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
                   const isSelected = selectedNodeId === node.id;
                   const isHovered = hoveredNode?.id === node.id;
                   const isSuper = node.type === 'super';
+                  const isThreatened = threats.some(t => t.targetId === node.id);
                   // bigger hit area
                   const R = isSuper ? 8 : 5.5;
                   const hitR = R + 6; // invisible hit radius — much easier to click
                   return (
                     <Marker key={node.id} coordinates={[node.lng, node.lat]}>
                       {/* Glow ring */}
-                      {(isSelected || isHovered || isSuper) && (
+                      {(isSelected || isHovered || isSuper || isThreatened) && (
                         <circle
                           r={R + 7}
                           fill="none"
-                          stroke={isSuper ? '#a855f7' : '#00f0ff'}
-                          strokeWidth="0.9"
-                          opacity={isSelected ? 1 : 0.45}
-                          style={{ pointerEvents: 'none' }}
+                          stroke={isThreatened ? '#ef4444' : isSuper ? '#a855f7' : '#00f0ff'}
+                          strokeWidth={isThreatened ? "1.5" : "0.9"}
+                          opacity={isSelected || isThreatened ? 1 : 0.45}
+                          style={{ pointerEvents: 'none', filter: isThreatened ? 'drop-shadow(0 0 6px rgba(239,68,68,0.8))' : 'none' }}
                         />
                       )}
                       {/* Visible dot */}
@@ -258,12 +277,13 @@ function FlatMapView({ nodes, connections, onSelectNode, selectedNodeId }) {
 FlatMapView.propTypes = {
   nodes: PropTypes.array.isRequired,
   connections: PropTypes.array.isRequired,
+  threats: PropTypes.array,
   onSelectNode: PropTypes.func.isRequired,
   selectedNodeId: PropTypes.string,
 };
 
 // ── Main MapView ───────────────────────────────────────────────────────────
-export default function MapView({ nodes, onSelectNode, selectedNodeId, flyToRef, viewMode, setViewMode }) {
+export default function MapView({ nodes, threats = [], onSelectNode, selectedNodeId, flyToRef, viewMode, setViewMode }) {
   const connections = useMemo(
     () => buildConnections(nodes),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -309,6 +329,7 @@ export default function MapView({ nodes, onSelectNode, selectedNodeId, flyToRef,
           <GlobeView
             nodes={nodes}
             connections={connections}
+            threats={threats}
             onSelectNode={onSelectNode}
             selectedNodeId={selectedNodeId}
             flyToRef={flyToRef}
@@ -319,6 +340,7 @@ export default function MapView({ nodes, onSelectNode, selectedNodeId, flyToRef,
         <FlatMapView
           nodes={nodes}
           connections={connections}
+          threats={threats}
           onSelectNode={onSelectNode}
           selectedNodeId={selectedNodeId}
         />
@@ -329,6 +351,7 @@ export default function MapView({ nodes, onSelectNode, selectedNodeId, flyToRef,
 
 MapView.propTypes = {
   nodes: PropTypes.array.isRequired,
+  threats: PropTypes.array,
   onSelectNode: PropTypes.func.isRequired,
   selectedNodeId: PropTypes.string,
   flyToRef: PropTypes.object,

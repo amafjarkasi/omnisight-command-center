@@ -71,6 +71,7 @@ function generateInitialNodes() {
 
 let activeNodes = generateInitialNodes();
 let globalConnectivity = 87;
+let activeThreats = [];
 let regionalActivity = [
   { region: 'NA', activity: 85 },
   { region: 'EU', activity: 72 },
@@ -140,6 +141,41 @@ wss.on('connection', (ws) => {
       activity: Math.max(10, Math.min(100, item.activity + (Math.random() * 8 - 4))),
     }));
 
+
+    // 6. Threat Intelligence
+    // Remove expired threats (older than 10s)
+    const now = Date.now();
+    activeThreats = activeThreats.filter(t => now - t.timestamp < 10000);
+
+    // Randomly generate new threat (20% chance per tick)
+    if (Math.random() < 0.20 && activeNodes.length > 0) {
+      const targetNode = activeNodes[Math.floor(Math.random() * activeNodes.length)];
+      // Generate random source coordinates
+      const sourceLat = (Math.random() * 160) - 80;
+      const sourceLng = (Math.random() * 360) - 180;
+
+      const threatTypes = ['DDoS', 'Intrusion Attempt', 'Data Exfiltration', 'Malware Beacon', 'Port Scan'];
+      const type = threatTypes[Math.floor(Math.random() * threatTypes.length)];
+
+      const threat = {
+        id: `THREAT-${Date.now()}`,
+        type,
+        source: { lat: sourceLat, lng: sourceLng },
+        targetId: targetNode.id,
+        timestamp: now
+      };
+
+      activeThreats.push(threat);
+
+      // Override log update with this high-priority threat alert
+      logUpdate = {
+        id: Date.now(),
+        type: 'ALERT',
+        timestamp: new Date().toISOString(),
+        message: `CRITICAL: ${type} detected targeting ${targetNode.name} (${targetNode.id})`
+      };
+    }
+
     // Broadcast tick payload
     ws.send(JSON.stringify({
       type: 'TICK',
@@ -148,7 +184,8 @@ wss.on('connection', (ws) => {
         throughput: throughputUpdate,
         log: logUpdate,
         nodeUpdates,
-        regionalActivity
+        regionalActivity,
+        activeThreats
       }
     }));
   }, 2000);

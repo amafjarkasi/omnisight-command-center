@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Activity, Cpu, TrendingUp, TrendingDown, Minus, Wifi, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Activity, Cpu, TrendingUp, TrendingDown, Minus, Wifi, AlertTriangle, CheckCircle, ShieldAlert } from 'lucide-react';
 import {
   ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceLine, Area, AreaChart,
 } from 'recharts';
@@ -40,7 +40,7 @@ function ThroughputTooltip({ active, payload }) {
 }
 
 export default function IntelligenceHub({ data }) {
-  const { globalConnectivity, throughput, regionalActivity } = data;
+  const { globalConnectivity, throughput, regionalActivity, activeThreats = [] } = data;
 
   const tpAnalytics = useMemo(() => {
     if (!throughput?.length) return { current: 0, avg: 0, peak: 0, trendPct: 0, dir: 'flat' };
@@ -116,6 +116,46 @@ export default function IntelligenceHub({ data }) {
             ))}
           </div>
         </div>
+      </div>
+
+
+      {/* ── Security Posture ── */}
+      <div className="px-5 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <ShieldAlert size={14} className={activeThreats.length > 0 ? "text-red-400 animate-pulse" : "text-emerald-400"} />
+            <span className="text-xs font-bold text-white/50 uppercase tracking-widest">Security Posture</span>
+          </div>
+          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-none border ${activeThreats.length > 0 ? 'bg-red-500/20 text-red-400 border-red-500/40' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'}`}>
+            {activeThreats.length > 0 ? 'DEFCON 3' : 'DEFCON 5'}
+          </span>
+        </div>
+
+        {activeThreats.length > 0 ? (
+          <div className="space-y-2">
+            {activeThreats.slice(0, 3).map((threat, i) => (
+              <div key={i} className="flex flex-col gap-1 p-2 bg-red-500/[0.05] border border-red-500/20 rounded-none group">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-red-400/90">{threat.type}</span>
+                  <span className="text-[9px] text-white/40 font-mono text-right">{threat.targetId}</span>
+                </div>
+                <div className="text-[9px] text-white/30 font-mono flex items-center gap-1">
+                  <span>SRC: {threat.source.lat.toFixed(1)}, {threat.source.lng.toFixed(1)}</span>
+                </div>
+              </div>
+            ))}
+            {activeThreats.length > 3 && (
+              <div className="text-center text-[10px] text-red-400/50 pt-1">
+                +{activeThreats.length - 3} additional threats detected
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center p-3 border border-emerald-500/20 bg-emerald-500/[0.03]">
+             <span className="text-xs font-mono text-emerald-400/60 uppercase">Systems Secure</span>
+             <span className="text-[10px] text-white/30 mt-1">No active anomalies detected.</span>
+          </div>
+        )}
       </div>
 
       {/* ── System Throughput ── */}
@@ -256,6 +296,7 @@ IntelligenceHub.propTypes = {
     globalConnectivity: PropTypes.number.isRequired,
     throughput: PropTypes.array.isRequired,
     regionalActivity: PropTypes.array.isRequired,
+    activeThreats: PropTypes.array,
   }).isRequired,
 };
 

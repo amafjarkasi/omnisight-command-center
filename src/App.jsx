@@ -8,7 +8,7 @@ import { Server, Search, X, MapPin } from 'lucide-react';
 import { geocodeSearch } from './services/maptoolkit';
 
 export default function App() {
-  const { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, pushLog } = useMockData();
+  const { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, activeThreats = [], pushLog } = useMockData();
   const [selectedNode, setSelectedNode] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [geocodeSuggestions, setGeocodeSuggestions] = useState([]);
@@ -28,7 +28,7 @@ export default function App() {
     pushLog('INFO', `Geo-ping sequence started for ${node.name}`);
   }, [pushLog]);
 
-  const hubData = { globalConnectivity, throughput, regionalActivity };
+  const hubData = { globalConnectivity, throughput, regionalActivity, activeThreats };
 
   // ── Find nearest node (same region prefix) for FastRoute ──────────────
   const nearestNode = useMemo(() => {
@@ -137,12 +137,23 @@ export default function App() {
   }, []);
 
   return (
-    <div className="relative flex h-screen w-full bg-background-dark font-display text-slate-100 overflow-hidden">
+    <div className="relative flex h-screen w-full bg-background-dark font-display text-slate-100 overflow-hidden crt-overlay">
+
+      {/* ── Global Threat Banner ── */}
+      {activeThreats.length > 0 && (
+        <div className="absolute top-0 left-0 right-0 z-[100] pointer-events-none flex justify-center mt-1">
+           <div className="bg-red-500/80 text-white font-bold tracking-[0.3em] uppercase px-8 py-1.5 text-[10px] animate-pulse rounded-none shadow-[0_0_20px_rgba(239,68,68,0.8)] border-x-4 border-b-2 border-red-900 glitch-text">
+             WARNING: {activeThreats.length} CRITICAL THREAT{activeThreats.length > 1 ? 'S' : ''} DETECTED
+           </div>
+        </div>
+      )}
+
 
       {/* ── Full-screen globe/map ── */}
       <div className="absolute inset-0 z-0 pointer-events-auto">
         <MapView
           nodes={filteredNodes}
+          threats={activeThreats}
           onSelectNode={handleSelectNode}
           selectedNodeId={selectedNode?.id}
           flyToRef={flyToRef}
@@ -252,6 +263,7 @@ export default function App() {
               <NodeDetailPanel
                 node={selectedNode}
                 nearestNode={nearestNode}
+                threats={activeThreats}
                 onClose={() => setSelectedNode(null)}
                 onDiagnostic={handleDiagnostic}
                 pushLog={pushLog}
