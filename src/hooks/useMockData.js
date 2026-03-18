@@ -22,7 +22,7 @@ export function useMockData() {
 
     const connectWS = () => {
       // Connect to our new backend!
-      ws = new WebSocket('ws://localhost:8080');
+      ws = new WebSocket(import.meta.env.VITE_WS_URL || 'ws://localhost:8080');
 
       ws.onopen = () => {
         setSystemLogs(prev => [{ id: Date.now(), type: 'INFO', timestamp: new Date(), message: 'Connected to Live Telemetry Stream' }, ...prev]);

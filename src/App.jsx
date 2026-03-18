@@ -184,7 +184,7 @@ export default function App() {
           </div>
 
           {/* Geocode suggestions dropdown */}
-          {geocodeSuggestions.length > 0 && searchFocused === false || geocodeSuggestions.length > 0 ? (
+          {geocodeSuggestions.length > 0 && searchFocused ? (
             <div className="absolute top-full left-0 right-0 mt-1 glass-panel rounded-none overflow-hidden z-[9999] border border-white/10 shadow-2xl">
               <div className="px-3 py-2 border-b border-white/[0.06]">
                 <span className="text-[10px] text-white/30 uppercase font-bold tracking-widest">📍 MapToolkit — Jump to location</span>
