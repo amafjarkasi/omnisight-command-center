@@ -151,7 +151,7 @@ export default function GlobeView({ nodes, connections, onSelectNode, selectedNo
           if (node.id === selectedNodeId) return '#ffffff';
           return node.type === 'super' ? '#c084fc' : '#22d3ee';
         }}
-        pointResolution={20}
+        pointResolution={12}
         pointLabel={nodeTooltip}
         onPointClick={handleNodeClick}
         pointsMerge={false}
@@ -182,12 +182,7 @@ export default function GlobeView({ nodes, connections, onSelectNode, selectedNo
         arcDashGap={0.1}
         arcDashAnimateTime={c => c.isSuper ? 2600 : 3800}
         arcStroke={c => c.isSuper ? 1.4 : 0.6}
-        arcAltitude={c => {
-          const dist = Math.sqrt(
-            (c.target.lat - c.source.lat) ** 2 + (c.target.lng - c.source.lng) ** 2
-          );
-          return Math.min(0.5, dist / 250);
-        }}
+        arcAltitude={c => c.altitude}
       />
 
       {/* ── Hold-to-toggle ring indicator ── */}
