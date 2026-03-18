@@ -1,6 +1,19 @@
 import { WebSocketServer } from 'ws';
 
-const wss = new WebSocketServer({ port: 8080 });
+const wss = new WebSocketServer({
+  port: 8080,
+  verifyClient: (info, callback) => {
+    const origin = info.origin;
+    const allowedOrigins = ['http://localhost:5173', 'http://localhost:4173'];
+
+    if (allowedOrigins.includes(origin)) {
+      callback(true);
+    } else {
+      console.warn(`Blocked unauthorized WebSocket connection attempt from origin: ${origin}`);
+      callback(false, 403, 'Unauthorized');
+    }
+  }
+});
 
 const GEO_HUBS = [
   { region: 'NA-East',    lat: 40.71,  lng: -74.01,  superName: 'NY-Metro',   count: 5 },
