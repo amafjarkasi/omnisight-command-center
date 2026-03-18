@@ -17,7 +17,7 @@ const escapeHtml = (unsafe) => {
     .replace(/'/g, "&#039;");
 };
 
-export default function GlobeView({ nodes, connections, onSelectNode, selectedNodeId, flyToRef }) {
+export default function GlobeView({ nodes, connections, threats = [], onSelectNode, selectedNodeId, flyToRef }) {
   const globeRef = useRef(null);
   const containerRef = useRef(null);
   const [dims, setDims] = useState({ w: 800, h: 600 });
@@ -122,6 +122,38 @@ export default function GlobeView({ nodes, connections, onSelectNode, selectedNo
 
   const circumference2pi = 2 * Math.PI * 18; // for SVG hold ring r=18
 
+  const threatArcs = threats.map(t => {
+    const targetNode = nodes.find(n => n.id === t.targetId);
+    if (!targetNode) return null;
+    return {
+      source: t.source,
+      target: targetNode,
+      isThreat: true,
+      id: t.id
+    };
+  }).filter(Boolean);
+
+  const threatRings = threats.map(t => {
+    const targetNode = nodes.find(n => n.id === t.targetId);
+    if (!targetNode) return null;
+    return targetNode;
+  }).filter(Boolean);
+
+  const combinedArcs = [...connections, ...threatArcs];
+
+  // Create a combined rings array for regular rings and threat rings,
+  // making sure not to duplicate nodes if they are already in the base rings.
+  const baseRings = nodes.filter(n => n.type === 'super' || n.id === selectedNodeId);
+  const combinedRings = [...baseRings];
+
+  threatRings.forEach(tr => {
+    if (!combinedRings.find(r => r.id === tr.id)) {
+      combinedRings.push(tr);
+    }
+  });
+
+
+
   return (
     <div
       ref={containerRef}
@@ -157,32 +189,31 @@ export default function GlobeView({ nodes, connections, onSelectNode, selectedNo
         pointsMerge={false}
 
         // ── Rings ─────────────────────────────────────────────────────
-        ringsData={nodes.filter(n => n.type === 'super' || n.id === selectedNodeId)}
+        ringsData={combinedRings}
         ringLat="lat"
         ringLng="lng"
-        ringColor={n =>
-          n.id === selectedNodeId
-            ? () => 'rgba(255,255,255,0.85)'
-            : n.type === 'super'
-              ? () => 'rgba(192,132,252,0.65)'
-              : () => 'rgba(34,211,238,0.6)'
-        }
-        ringMaxRadius={n => n.id === selectedNodeId ? 4.5 : 3}
-        ringPropagationSpeed={2.2}
-        ringRepeatPeriod={1100}
+        ringColor={n => {
+          if (threatRings.find(tr => tr.id === n.id)) return () => 'rgba(239, 68, 68, 0.9)'; // Red for threats
+          if (n.id === selectedNodeId) return () => 'rgba(255,255,255,0.85)';
+          if (n.type === 'super') return () => 'rgba(192,132,252,0.65)';
+          return () => 'rgba(34,211,238,0.6)';
+        }}
+        ringMaxRadius={n => threatRings.find(tr => tr.id === n.id) ? 6 : n.id === selectedNodeId ? 4.5 : 3}
+        ringPropagationSpeed={n => threatRings.find(tr => tr.id === n.id) ? 4.0 : 2.2}
+        ringRepeatPeriod={n => threatRings.find(tr => tr.id === n.id) ? 400 : 1100}
 
         // ── Arcs ──────────────────────────────────────────────────────
-        arcsData={connections}
+        arcsData={combinedArcs}
         arcStartLat={c => c.source.lat}
         arcStartLng={c => c.source.lng}
         arcEndLat={c => c.target.lat}
         arcEndLng={c => c.target.lng}
-        arcColor="color"
-        arcDashLength={0.4}
-        arcDashGap={0.1}
-        arcDashAnimateTime={c => c.isSuper ? 2600 : 3800}
-        arcStroke={c => c.isSuper ? 1.4 : 0.6}
-        arcAltitude={c => c.altitude}
+        arcColor={c => c.isThreat ? ['rgba(239,68,68,0)', 'rgba(239,68,68,1)', 'rgba(239,68,68,0)'] : c.color}
+        arcDashLength={c => c.isThreat ? 0.8 : 0.4}
+        arcDashGap={c => c.isThreat ? 0.2 : 0.1}
+        arcDashAnimateTime={c => c.isThreat ? 1000 : c.isSuper ? 2600 : 3800}
+        arcStroke={c => c.isThreat ? 2.0 : c.isSuper ? 1.4 : 0.6}
+        arcAltitude={c => c.isThreat ? 0.6 : c.altitude}
       />
 
       {/* ── Hold-to-toggle ring indicator ── */}
@@ -231,6 +262,7 @@ export default function GlobeView({ nodes, connections, onSelectNode, selectedNo
 GlobeView.propTypes = {
   nodes: PropTypes.array.isRequired,
   connections: PropTypes.array.isRequired,
+  threats: PropTypes.array,
   onSelectNode: PropTypes.func.isRequired,
   selectedNodeId: PropTypes.string,
   flyToRef: PropTypes.object,

@@ -15,6 +15,7 @@ export function useMockData() {
   const [systemLogs, setSystemLogs] = useState([]);
   const [activeNodes, setActiveNodes] = useState([]);
   const [regionalActivity, setRegionalActivity] = useState([]);
+  const [activeThreats, setActiveThreats] = useState([]);
 
   useEffect(() => {
     let ws;
@@ -50,6 +51,10 @@ export function useMockData() {
             setRegionalActivity(payload.regionalActivity);
           }
           
+          if (payload.activeThreats) {
+            setActiveThreats(payload.activeThreats);
+          }
+
           if (payload.nodeUpdates) {
             setActiveNodes(prev => prev.map(node => {
               const update = payload.nodeUpdates.find(u => u.id === node.id);
@@ -84,5 +89,5 @@ export function useMockData() {
     setSystemLogs(prev => [{ id: Date.now(), type, timestamp: new Date(), message }, ...prev.slice(0, 49)]);
   };
 
-  return { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, pushLog };
+  return { globalConnectivity, throughput, systemLogs, activeNodes, regionalActivity, activeThreats, pushLog };
 }
